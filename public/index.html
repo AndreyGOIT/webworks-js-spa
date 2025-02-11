@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebWorks Studio</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        nav { margin: 20px; }
+        button { margin: 5px; padding: 10px; cursor: pointer; }
+        #main_alue { margin-top: 20px; }
+    </style>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+    <h1>WebWorks Studio</h1>
+    <nav>
+        <button onclick="loadPage('home')">Etusivu</button>
+        <button onclick="loadPage('tuotteet')">Tuotteet</button>
+        <button onclick="loadPage('yhteystiedot')">Yhteystiedot</button>
+        <button onclick="loadPage('henkilokunta')">Henkilökunta</button>
+    </nav>
+    <div id="main_alue">Tervetuloa WebWorks Studioon!</div>
+
+    <script src="./js/app.js"></script>
+</body>
+</html>
