@@ -1,17 +1,17 @@
 # node_modules
 node_modules/
 
-# Логи
+# logs
 *.log
 
-# Файлы сессий
+# sesssion files
 *.session
 
-# Персональные конфигурации редакторов
+# personal files
 .vscode/
 
-# Файлы IDE
+# files IDE
 .idea/
 
-# Файлы паролей и конфиденциальной информации
+# password for db
 *.env
