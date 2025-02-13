@@ -7,39 +7,57 @@ const bcrypt = require('bcrypt');
 const app = express();
 const PORT = 3000;
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5500',  // Адрес фронта
+    credentials: true  // Разрешает отправку cookie
+}));
 app.use(express.static('public'));
 app.use(express.json());
 
 // Настроим сессии
 app.use(session({
-    secret: 'secret_key', // Секрет для подписи cookie
+    secret: 'secret_key',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false } // Включим secure для HTTPS
+    cookie: {
+        httpOnly: true,   // Защита от XSS
+        secure: false,    // false для локальной разработки, true для HTTPS
+        sameSite: 'lax' // Меняем 'none' на 'lax'
+    }
 }));
 
 // Эндпоинт для логина
 app.post('/api/login', (req, res) => {
-    console.log('Request body:', req.body); // Логируем данные запроса
+    console.log('Request body:', req.body);
     const { username, password } = req.body;
-    
-    // Пример: База данных пользователей (в реальном приложении будет использоваться база данных)
+
+    // Имитация базы данных пользователей
     const users = [
         { username: 'admin', password: '1234' },
         { username: 'user', password: 'password' }
     ];
-    
-    // Ищем пользователя по имени
+
+    // Ищем пользователя по username
     const user = users.find(user => user.username === username);
-    
+
     if (user && user.password === password) {
         console.log('Login successful');
         req.session.user = { username }; // Сохраняем пользователя в сессии
-        console.log("Session after login:", req.session); // <== ВАЖНО!
-        return res.json({ success: true });
+        console.log("Session after login:", req.session);
+
+        // Сохраняем сессию и только затем отправляем ответ
+        return req.session.save(err => {
+            if (err) {
+                console.error('Ошибка сохранения сессии:', err);
+                return res.status(500).json({ success: false, error: 'Ошибка сервера' });
+            }
+            console.log("Session successfully saved!");
+            res.json({ success: true, user: req.session.user.username });
+        });
     }
-    res.status(401).json({ message: 'Invalid username or password' });
+
+    // Если логин неудачный, сразу отправляем ответ (без return, так как выше уже был return)
+    res.status(401).json({ success: false, error: 'Неверные учетные данные' });
 });
 
 // Проверка авторизации
@@ -52,7 +70,14 @@ function isAuthenticated(req, res, next) {
 
 // Эндпоинт для проверки авторизации
 app.get('/api/check-auth', (req, res) => {
-    res.json({ authenticated: !!req.session.user });
+    console.log('Session in chek-auth:', req.session);  // Лог сессии
+    
+    if (req.session.user) {
+        return res.json({ isAuthenticated: true, user: req.session.user });
+    }
+
+    res.json({ isAuthenticated: false });
+    // res.json({ isAuthenticated: !!req.session.user });
 });
 
 // Эндпоинт для вывода данных сотрудников (с мидлвейром)

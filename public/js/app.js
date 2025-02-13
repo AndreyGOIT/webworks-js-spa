@@ -14,7 +14,10 @@ function loadPage(page) {
 }
 
 function loadStaff() {
-    fetch("/api/staff")
+    fetch("/api/staff", {
+        method: 'GET',
+        credentials: 'include'  // Это гарантирует, что сессионная кука будет отправляться с запросами
+    })
         .then(response => response.json())
         .then(data => {
             const staff = data.team; // Доступ к массиву team

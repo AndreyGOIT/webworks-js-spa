@@ -12,7 +12,27 @@
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-    <h1>WebWorks Studio</h1>
+    <header class="bg-light py-3">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="navbar-brand" href="#">WebWorks Studio</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><button onclick="loadPage('home')">Etusivu</button></li>
+                        <li class="nav-item"><button onclick="loadPage('tuotteet')">Tuotteet</button></li>
+                        <li class="nav-item"><button onclick="loadPage('yhteystiedot')">Yhteystiedot</button></li>
+                        <li class="nav-item"><button onclick="loadPage('henkilokunta')">Henkilökunta</button></li>
+                        <li class="nav-item"><button id="login-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button></li>
+                        <li class="nav-item"><button id="logout-button" class="btn btn-danger d-none" onclick="logout()">Logout</button></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <!-- <h1>WebWorks Studio</h1>
     <nav>
       <button onclick="loadPage('home')">Etusivu</button>
       <button onclick="loadPage('tuotteet')">Tuotteet</button>
@@ -24,44 +44,113 @@
       <button id="logout-button" onclick="logout()" style="display: none">
         Logout
       </button>
-    </nav>
-    <div id="main_alue">Tervetuloa WebWorks Studioon!</div>
+    </nav> -->
+    <main class="container my-5">
+      <div id="main_alue">Tervetuloa WebWorks Studioon!</div>
+    </main>
+
+    <footer class="bg-dark text-white py-4">
+      <div class="container text-center">
+        <p>&copy; 2025 WebWorks Studio. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- Модальное окно логина -->
+    <div
+      class="modal fade"
+      id="loginModal"
+      tabindex="-1"
+      aria-labelledby="loginModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="loginModalLabel">Kirjaudu sisään</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <label for="username">Käyttäjänimi:</label>
+            <input type="text" id="username" class="form-control" />
+
+            <label for="password" class="mt-2">Salasana:</label>
+            <input type="password" id="password" class="form-control" />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Sulje
+            </button>
+            <button type="button" class="btn btn-primary" onclick="login()">
+              Kirjaudu
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="./js/app.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        checkAuthStatus();
-      });
+    document.addEventListener("DOMContentLoaded", checkAuthStatus);
 
-      function checkAuthStatus() {
-        fetch("/api/check-auth", {
-          method: "GET",
-          credentials: "include", // Важно для передачи сессионных куки
+    function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password }),
+            credentials: 'include'  // ВАЖНО: отправляем cookies с сессией
         })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.authenticated) {
-              document.getElementById("login-button").style.display = "none";
-              document.getElementById("logout-button").style.display = "block";
+        .then(response => {
+            console.log("ответ response при логине: ", response);
+            if (response.ok) {
+                checkAuthStatus(); // Проверяем статус сразу после логина
+                bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
             } else {
-              document.getElementById("login-button").style.display = "block";
-              document.getElementById("logout-button").style.display = "none";
+                alert("Väärä käyttäjätunnus tai salasana");
             }
-          })
-          .catch((error) => console.error("Auth check error:", error));
-      }
-
-      function logout() {
-        fetch("/api/logout", {
-          method: "POST",
-          credentials: "include", // Передаем куки для уничтожения сессии
         })
-          .then(() => {
-            checkAuthStatus(); // Обновляем UI после выхода
-            window.location.href = "/";
-          })
-          .catch((error) => console.error("Logout error:", error));
-      }
-    </script>
+        .catch(error => console.error('Virhe:", error'));
+    }
+
+    function logout() {
+        fetch('/api/logout', {
+            method: 'POST',
+            credentials: 'include' // Удаляем сессию на сервере
+        })
+        .then(() => checkAuthStatus())
+        .catch(error => console.error('Virhe:", error'));
+    }
+
+    function checkAuthStatus() {
+        fetch('/api/check-auth', {
+            method: 'GET',
+            credentials: 'include' // Проверяем сессию на сервере
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Server response:', data);
+            console.log("data.isAuthenticated: ", data.isAuthenticated);
+            updateAuthUI(data.isAuthenticated);
+})
+        .catch(() => updateAuthUI(false));
+    }
+
+    function updateAuthUI(isLoggedIn) {
+        console.log("в функции updateAuthUI(isLoggedIn) аргумент isLoggedIn: ", isLoggedIn);
+        document.getElementById('login-button').style.display = isLoggedIn ? "none" : "inline-block";
+        document.getElementById('logout-button').style.display = isLoggedIn ? "inline-block" : "none";
+    }
+</script>
   </body>
 </html>
