@@ -25,6 +25,7 @@
                         <li class="nav-item"><button onclick="loadPage('tuotteet')">Tuotteet</button></li>
                         <li class="nav-item"><button onclick="loadPage('yhteystiedot')">Yhteystiedot</button></li>
                         <li class="nav-item"><button onclick="loadPage('henkilokunta')">Henkilökunta</button></li>
+                        <!--login and logout buttons-->
                         <li class="nav-item"><button id="login-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button></li>
                         <li class="nav-item"><button id="logout-button" class="btn btn-danger d-none" onclick="logout()">Logout</button></li>
                     </ul>
@@ -147,9 +148,24 @@
     }
 
     function updateAuthUI(isLoggedIn) {
-        console.log("в функции updateAuthUI(isLoggedIn) аргумент isLoggedIn: ", isLoggedIn);
-        document.getElementById('login-button').style.display = isLoggedIn ? "none" : "inline-block";
-        document.getElementById('logout-button').style.display = isLoggedIn ? "inline-block" : "none";
+        let loginBtn = document.getElementById('login-button');
+    let logoutBtn = document.getElementById('logout-button');
+
+    if (!logoutBtn) {
+        console.error("Logout button не найден в DOM!");
+        return;
+    }
+
+    if (isLoggedIn) {
+        loginBtn.classList.add('d-none');
+        logoutBtn.classList.remove('d-none'); // Показываем Logout
+    } else {
+        loginBtn.classList.remove('d-none');
+        logoutBtn.classList.add('d-none'); // Прячем Logout
+    }
+        // console.log("в функции updateAuthUI(isLoggedIn) аргумент isLoggedIn: ", isLoggedIn);
+        // document.getElementById('login-button').style.display = isLoggedIn ? "none" : "inline-block";
+        // document.getElementById('logout-button').style.display = isLoggedIn ? "inline-block" : "none";
     }
 </script>
   </body>
