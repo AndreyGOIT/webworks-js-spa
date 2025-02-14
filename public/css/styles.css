@@ -45,6 +45,9 @@ button {
 .slogan-img {
   width: 300px;
 }
+.footer {
+  background-color: #075a6c;
+}
 
 .footer-row {
   display: flex;
