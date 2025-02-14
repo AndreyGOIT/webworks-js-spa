@@ -39,3 +39,10 @@ button {
 .slogan-img {
   width: 300px;
 }
+
+.footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px;
+}
