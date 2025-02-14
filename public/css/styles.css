@@ -12,6 +12,10 @@ button {
   padding: 10px;
   cursor: pointer;
 }
+.nav-btn {
+  color: rgb(62, 59, 59);
+  border: none;
+}
 #main_alue {
   margin-top: 20px;
 }
