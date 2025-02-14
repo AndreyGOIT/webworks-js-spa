@@ -41,9 +41,9 @@ app.post('/api/login', (req, res) => {
     const user = users.find(user => user.username === username);
 
     if (user && user.password === password) {
-        console.log('Login successful');
+        //console.log('Login successful');
         req.session.user = { username }; // Сохраняем пользователя в сессии
-        console.log("Session after login:", req.session);
+        //console.log("Session after login:", req.session);
 
         // Сохраняем сессию и только затем отправляем ответ
         return req.session.save(err => {
@@ -51,7 +51,7 @@ app.post('/api/login', (req, res) => {
                 console.error('Ошибка сохранения сессии:', err);
                 return res.status(500).json({ success: false, error: 'Ошибка сервера' });
             }
-            console.log("Session successfully saved!");
+            //console.log("Session successfully saved!");
             res.json({ success: true, user: req.session.user.username });
         });
     }
@@ -70,7 +70,7 @@ function isAuthenticated(req, res, next) {
 
 // Эндпоинт для проверки авторизации
 app.get('/api/check-auth', (req, res) => {
-    console.log('Session in chek-auth:', req.session);  // Лог сессии
+    //console.log('Session in chek-auth:', req.session);  // Лог сессии
     
     if (req.session.user) {
         return res.json({ isAuthenticated: true, user: req.session.user });

@@ -1,5 +1,11 @@
+document.addEventListener("DOMContentLoaded", function () {
+    loadPage('home');
+});
+
 const pages = {
-    home: "<h2>Etusivu</h2><p>Tervetuloa WebWorks Studioon!</p>",
+    home: `<div class='container hero-img'>
+    <h1>WebWorks Studio</h1>
+    </div>`,
     tuotteet: "<h2>Tuotteet</h2><p>Tässä on tuotteemme.</p>",
     yhteystiedot: "<h2>Yhteystiedot</h2><p>Ota yhteyttä meihin!</p>",
     henkilokunta: "<h2>Henkilökunta</h2><div id='staff-table'></div>"

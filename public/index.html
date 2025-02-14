@@ -13,43 +13,68 @@
   </head>
   <body>
     <header class="bg-light py-3">
-        <div class="container">
-            <nav class="navbar navbar-expand-lg navbar-light">
-                <button class="navbar-brand btn btn-link p-0" onclick="loadPage('home')">
-                    <img src="./images/Logo_WebWorks_Studio.png" alt="Logo" height="40">
-                    WebWorks Studio
+      <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <button
+            class="navbar-brand btn btn-link p-0"
+            onclick="loadPage('home')"
+          >
+            <img
+              src="./images/Logo_WebWorks_Studio.png"
+              alt="Logo"
+              height="40"
+            />
+            WebWorks Studio
+          </button>
+          <!-- nav btns -->
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <button onclick="loadPage('home')">Etusivu</button>
+              </li>
+              <li class="nav-item">
+                <button onclick="loadPage('tuotteet')">Tuotteet</button>
+              </li>
+              <li class="nav-item">
+                <button onclick="loadPage('yhteystiedot')">Yhteystiedot</button>
+              </li>
+              <li class="nav-item">
+                <button onclick="loadPage('henkilokunta')">Henkilökunta</button>
+              </li>
+              <!--login and logout buttons-->
+              <li class="nav-item">
+                <button
+                  id="login-button"
+                  class="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#loginModal"
+                >
+                  Login
                 </button>
-                <!-- nav btns -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
+              </li>
+              <li class="nav-item">
+                <button
+                  id="logout-button"
+                  class="btn btn-danger d-none"
+                  onclick="logout()"
+                >
+                  Logout
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><button onclick="loadPage('home')">Etusivu</button></li>
-                        <li class="nav-item"><button onclick="loadPage('tuotteet')">Tuotteet</button></li>
-                        <li class="nav-item"><button onclick="loadPage('yhteystiedot')">Yhteystiedot</button></li>
-                        <li class="nav-item"><button onclick="loadPage('henkilokunta')">Henkilökunta</button></li>
-                        <!--login and logout buttons-->
-                        <li class="nav-item"><button id="login-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button></li>
-                        <li class="nav-item"><button id="logout-button" class="btn btn-danger d-none" onclick="logout()">Logout</button></li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
     </header>
-    <!-- <h1>WebWorks Studio</h1>
-    <nav>
-      <button onclick="loadPage('home')">Etusivu</button>
-      <button onclick="loadPage('tuotteet')">Tuotteet</button>
-      <button onclick="loadPage('yhteystiedot')">Yhteystiedot</button>
-      <button onclick="loadPage('henkilokunta')">Henkilökunta</button>
-      <button id="login-button" onclick="window.location.href='/login.html'">
-        Login
-      </button>
-      <button id="logout-button" onclick="logout()" style="display: none">
-        Logout
-      </button>
-    </nav> -->
+    <!-- main osio -->
     <main class="container my-5">
       <div id="main_alue">Tervetuloa WebWorks Studioon!</div>
     </main>
@@ -104,73 +129,72 @@
 
     <script src="./js/app.js"></script>
     <script>
-    document.addEventListener("DOMContentLoaded", checkAuthStatus);
+      document.addEventListener("DOMContentLoaded", checkAuthStatus);
 
-    function login() {
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+      function login() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
 
-        fetch('/api/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password }),
-            credentials: 'include'  // ВАЖНО: отправляем cookies с сессией
+        fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+          credentials: "include", // ВАЖНО: отправляем cookies с сессией
         })
-        .then(response => {
+          .then((response) => {
             console.log("ответ response при логине: ", response);
             if (response.ok) {
-                checkAuthStatus(); // Проверяем статус сразу после логина
-                bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+              checkAuthStatus(); // Проверяем статус сразу после логина
+              bootstrap.Modal.getInstance(
+                document.getElementById("loginModal")
+              ).hide();
             } else {
-                alert("Väärä käyttäjätunnus tai salasana");
+              alert("Väärä käyttäjätunnus tai salasana");
             }
-        })
-        .catch(error => console.error('Virhe:", error'));
-    }
+          })
+          .catch((error) => console.error('Virhe:", error'));
+      }
 
-    function logout() {
-        fetch('/api/logout', {
-            method: 'POST',
-            credentials: 'include' // Удаляем сессию на сервере
+      function logout() {
+        fetch("/api/logout", {
+          method: "POST",
+          credentials: "include", // Удаляем сессию на сервере
         })
-        .then(() => checkAuthStatus())
-        .catch(error => console.error('Virhe:", error'));
-    }
+          .then(() => checkAuthStatus())
+          .catch((error) => console.error('Virhe:", error'));
+      }
 
-    function checkAuthStatus() {
-        fetch('/api/check-auth', {
-            method: 'GET',
-            credentials: 'include' // Проверяем сессию на сервере
+      function checkAuthStatus() {
+        fetch("/api/check-auth", {
+          method: "GET",
+          credentials: "include", // Проверяем сессию на сервере
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Server response:', data);
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Server response:", data);
             console.log("data.isAuthenticated: ", data.isAuthenticated);
             updateAuthUI(data.isAuthenticated);
-})
-        .catch(() => updateAuthUI(false));
-    }
+          })
+          .catch(() => updateAuthUI(false));
+      }
 
-    function updateAuthUI(isLoggedIn) {
-        let loginBtn = document.getElementById('login-button');
-    let logoutBtn = document.getElementById('logout-button');
+      function updateAuthUI(isLoggedIn) {
+        let loginBtn = document.getElementById("login-button");
+        let logoutBtn = document.getElementById("logout-button");
 
-    if (!logoutBtn) {
-        console.error("Logout button не найден в DOM!");
-        return;
-    }
+        if (!logoutBtn) {
+          console.error("Logout button не найден в DOM!");
+          return;
+        }
 
-    if (isLoggedIn) {
-        loginBtn.classList.add('d-none');
-        logoutBtn.classList.remove('d-none'); // Показываем Logout
-    } else {
-        loginBtn.classList.remove('d-none');
-        logoutBtn.classList.add('d-none'); // Прячем Logout
-    }
-        // console.log("в функции updateAuthUI(isLoggedIn) аргумент isLoggedIn: ", isLoggedIn);
-        // document.getElementById('login-button').style.display = isLoggedIn ? "none" : "inline-block";
-        // document.getElementById('logout-button').style.display = isLoggedIn ? "inline-block" : "none";
-    }
-</script>
+        if (isLoggedIn) {
+          loginBtn.classList.add("d-none");
+          logoutBtn.classList.remove("d-none"); // Показываем Logout
+        } else {
+          loginBtn.classList.remove("d-none");
+          logoutBtn.classList.add("d-none"); // Прячем Logout
+        }
+      }
+    </script>
   </body>
 </html>
