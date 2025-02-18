@@ -26,42 +26,46 @@ app.use(session({
     }
 }));
 
+// Имитация базы данных пользователей с ролями
+const users = [
+    { username: 'admin', password: '1234', role: 'admin' },
+    { username: 'user', password: 'password', role: 'user' }
+];
+
 // Эндпоинт для логина
 app.post('/api/login', (req, res) => {
     console.log('Request body:', req.body);
     const { username, password } = req.body;
 
-    // Имитация базы данных пользователей
-    const users = [
-        { username: 'admin', password: '1234' },
-        { username: 'user', password: 'password' }
-    ];
+    // Ищем пользователя
+    const user = users.find(u => u.username === username && u.password === password);
 
-    // Ищем пользователя по username
-    const user = users.find(user => user.username === username);
+    if (user) {
+        req.session.user = { username: user.username, role: user.role }; // Сохраняем и роль
 
-    if (user && user.password === password) {
-        //console.log('Login successful');
-        req.session.user = { username }; // Сохраняем пользователя в сессии
-        //console.log("Session after login:", req.session);
-
-        // Сохраняем сессию и только затем отправляем ответ
         return req.session.save(err => {
             if (err) {
                 console.error('Ошибка сохранения сессии:', err);
                 return res.status(500).json({ success: false, error: 'Ошибка сервера' });
             }
-            //console.log("Session successfully saved!");
-            res.json({ success: true, user: req.session.user.username });
+            res.json({ success: true, user: req.session.user });
         });
     }
 
-    // Если логин неудачный, сразу отправляем ответ (без return, так как выше уже был return)
     res.status(401).json({ success: false, error: 'Неверные учетные данные' });
 });
 
-// Проверка авторизации
+// Проверка роли пользователя
+app.get("/api/user-role", (req, res) => {
+    if (!req.session.user) {
+        return res.json({ role: "guest" });
+    }
+    res.json({ role: req.session.user.role }); // Например, "admin" или "user"
+});
+
+// Middleware для защиты маршрутов
 function isAuthenticated(req, res, next) {
+    console.log("Session in isAuthenticated:", req.session);  // Логируем сессию
     if (req.session.user) {
         return next();
     }
@@ -70,7 +74,7 @@ function isAuthenticated(req, res, next) {
 
 // Эндпоинт для проверки авторизации
 app.get('/api/check-auth', (req, res) => {
-    //console.log('Session in chek-auth:', req.session);  // Лог сессии
+    console.log('Session in chek-auth:', req.session);  // Лог сессии
     
     if (req.session.user) {
         return res.json({ isAuthenticated: true, user: req.session.user });

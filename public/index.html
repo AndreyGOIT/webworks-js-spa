@@ -48,7 +48,7 @@
                 <button class="nav-btn" onclick="loadPage('yhteystiedot')">YHTEYSTIEDOT</button>
               </li>
               <li class="nav-item">
-                <button class="nav-btn" onclick="loadPage('henkilokunta')">HENKILÖKUNTA</button>
+                <button class="nav-btn" onclick="loadPage('henkilosto')">HENKILÖSTÖ</button>
               </li>
               <!--login and logout buttons-->
               <li class="nav-item">
@@ -108,9 +108,10 @@
             <h3>Navigointi</h3>
             <nav>
               <ul class="footer-nav-list">
-                <li><button class="footer-nav-button" onclick="loadPage('home')">Home</button></li>
-                <li><button class="footer-nav-button" onclick="loadPage('tuotteet')">Tuotteet</button></li>
-                <li><button class="footer-nav-button" onclick="loadPage('yhteystiedot')">Yhteystiedot</button></li>
+                <li><button class="footer-nav-button" onclick="loadPage('home')">HOME</button></li>
+                <li><button class="footer-nav-button" onclick="loadPage('tuotteet')">TUOTTEET</button></li>
+                <li><button class="footer-nav-button" onclick="loadPage('yhteystiedot')">YHTEYSTIEDOT</button></li>
+                <li><button class="footer-nav-button" onclick="loadPage('henkilosto')">HENKILÖSTÖ</button></li>
               </ul>
             </nav>
           </div>
@@ -201,7 +202,8 @@
       </div>
     </div>
 
-    <script src="./js/app.js"></script>
+    <script src="js/registration.js" async></script>
+    <script src="js/app.js" async></script>
     <script>
       document.addEventListener("DOMContentLoaded", checkAuthStatus);
 

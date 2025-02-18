@@ -100,3 +100,19 @@ button {
   margin: 0;
   padding: 60px 5px;
 }
+/* Styles for henkilosto */
+.invalid-feedback {
+  display: none;
+}
+
+input.is-invalid {
+  border-color: #dc3545;
+}
+
+input.is-valid {
+  border-color: #28a745;
+}
+
+#employee-list {
+  display: none;
+}

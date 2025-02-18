@@ -1,39 +1,59 @@
 {
+    "registeredUsers": [],
     "team": [
       {
+        "id": 1,
         "avatar": "images/man-avatar.jpeg",
         "name": "Andy Erokhin",
         "role": "Full Stack Developer",
         "email": "aerokhin@webworksstudio.com",
-        "phone": "+358 (XX) XXX-XXXX"
+        "phone": "+358 (XX) XXX-XXXX",
+        "desiredVacationMonth": ""
       },
       {
+        "id": 2,
         "avatar": "images/man-avatar.jpeg",
         "name": "Janne Virtanen",
         "role": "UI/UX Designer",
         "email": "janne@webworksstudio.com",
-        "phone": "+358 (XX) XXX-XXXX"
+        "phone": "+358 (XX) XXX-XXXX",
+        "desiredVacationMonth": ""
       },
       {
+        "id": 3,
         "avatar": "/images/woman-avatar.jpeg",
         "name": "Laura Nieminen",
         "role": "Projektipäällikkö",
         "email": "laura@webworksstudio.com",
-        "phone": "+358 (XX) XXX-XXXX"
+        "phone": "+358 (XX) XXX-XXXX",
+        "desiredVacationMonth": ""
       },
       {
+        "id": 4,
         "avatar": "images/man-avatar.jpeg",
         "name": "Mikko Salminen",
         "role": "Back-End Developer",
         "email": "mikko@webworksstudio.com",
-        "phone": "+358 (XX) XXX-XXXX"
+        "phone": "+358 (XX) XXX-XXXX",
+        "desiredVacationMonth": ""
       },
       {
+        "id": 5,
         "avatar": "images/woman-avatar.jpeg",
         "name": "Anna Korhonen",
         "role": "Markkinointipäällikkö",
         "email": "anna@webworksstudio.com",
-        "phone": "+358 (XX) XXX-XXXX"
+        "phone": "+358 (XX) XXX-XXXX",
+        "desiredVacationMonth": ""
+      },
+      {
+        "id": 6,
+        "avatar": "images/man-avatar.jpeg",
+        "name": "Matti Meikäläinen",
+        "role": "Front-End Developer",
+        "email": "matti@webworksstudio.com",
+        "phone": "+358 (XX) XXX-XXXX",
+        "desiredVacationMonth": ""
       }
     ]
   }
