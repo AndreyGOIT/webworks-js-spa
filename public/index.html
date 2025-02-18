@@ -236,7 +236,17 @@
           method: "POST",
           credentials: "include", // Istunnon poistaminen palvelimelta
         })
-          .then(() => checkAuthStatus())
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error("Ошибка выхода: " + response.statusText);
+              }
+              return response.json();
+            })
+          .then(data => {
+              console.log("Выход выполнен:", data.message);
+              checkAuthStatus(); // Обновляем интерфейс (скрываем/показываем кнопки)
+              loadPage('home');
+          })
           .catch((error) => console.error('Virhe:", error'));
       }
 

@@ -28,8 +28,10 @@ app.use(session({
 
 // Имитация базы данных пользователей с ролями
 const users = [
-    { username: 'admin', password: '1234', role: 'admin' },
-    { username: 'user', password: 'password', role: 'user' }
+    { id: 1, username: 'admin', password: '1234', role: 'admin', email: 'admin@webworksstudio.com', phone: '1234567890' },
+    { id: 2, username: 'user', password: 'password', role: 'user', email: 'user@ewebworksstudio.com', phone: '9876543210' },
+    { id: 3, username: 'Janne Virtanen', password: 'Virtanen', role: 'user', email: 'janne@webworksstudio.com', phone: '+358 (22) 222-2222' },
+    { id: 4, username: 'Mikko Mäkinen', password: 'Mäkinen', role: 'user', email: 'mikko@webworksstudio.com', phone: '+358 (77) 777-7777' }
 ];
 
 // Эндпоинт для логина
@@ -68,7 +70,7 @@ app.get('/api/user-profile', (req, res) => {
     if (!req.session.user) {
         return res.status(401).json({ error: "Неавторизованный доступ" });
     }
-
+    console.log("данные профиля авторизованного пользователя: ", req.session.user);
     const { username, role } = req.session.user;
 
     // Здесь можно подтягивать данные о пользователе из базы данных, если нужно
@@ -84,11 +86,16 @@ app.get('/api/user-profile', (req, res) => {
 
 // Middleware для защиты маршрутов
 function isAuthenticated(req, res, next) {
-    console.log("Session in isAuthenticated:", req.session);  // Логируем сессию
-    if (req.session.user) {
-        return next();
+    if (!req.session.user) {
+        return res.status(403).json({ error: "Not authenticated" });
     }
-    res.status(403).json({ error: 'Not authenticated' }); // Вернем JSON, а не строку
+    
+    // Проверка роли только для /api/staff
+    if (req.path === "/api/staff" && req.session.user.role !== "admin") {
+        return res.status(403).json({ error: "Access denied" });
+    }
+
+    next();
 }
 
 // Эндпоинт для проверки авторизации

@@ -45,25 +45,6 @@ const pages = {
 
     <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
   </form>
-
-  <!-- Ссылка на страницу с персоналом после регистрации -->
-  <div id="employee-list" class="d-none mt-4">
-    <h3>Сотрудники</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Avatar</th>
-          <th>Name</th>
-          <th>Role</th>
-          <th>Email</th>
-          <th>Phone</th>
-        </tr>
-      </thead>
-      <tbody id="staff-table">
-        <!-- Сюда будет выводиться список сотрудников -->
-      </tbody>
-    </table>
-  </div>
 </div>`
 };
 
@@ -74,21 +55,9 @@ window.loadPage = function (page) {
                 console.log("Роль пользователя:", role);
                 if (role === "admin") {
                     console.log("проверка сравнения: ", role === "admin");
-                    document.getElementById("main_alue").innerHTML = `<h2>Админ-панель сотрудников</h2><table class="table">
-                    <thead>
-                        <tr>
-                        <th>Avatar</th>
-                        <th>Name</th>
-                        <th>Role</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        </tr>
-                    </thead>
-                    <tbody id="staff-table">
-                        <!-- Сюда будет выводиться список сотрудников -->
-                    </tbody>
-                    </table>`;
-                    console.log("Вызываем loadStaff()");
+                    console.log("Admin вызывает loadStaff()");
+                    document.getElementById("main_alue").innerHTML = ""; // Очищаем содержимое main_alue
+                    document.getElementById("main_alue").innerHTML = "Таблица сотрудников";
                     loadStaff(); // Загружаем список сотрудников
                 } else if (role === "user") {
                     console.log("Вызываем loadUserProfile()");
@@ -141,17 +110,17 @@ function loadUserProfile() {
         });
 }
 //---old version loadPage----
-function loadPage(page) {
-    document.getElementById("main_alue").innerHTML = pages[page] || "<h2>Sivua ei löytynyt</h2>";
+// function loadPage(page) {
+//     document.getElementById("main_alue").innerHTML = pages[page] || "<h2>Sivua ei löytynyt</h2>";
 
-    if (page === "henkilosto") {
-        document.addEventListener("DOMContentLoaded", function () {
-            console.log("DOM загружен, вызываем loadStaff()");
-            loadStaff();
-        });
-        //loadStaff();
-    }
-}
+//     if (page === "henkilosto") {
+//         document.addEventListener("DOMContentLoaded", function () {
+//             console.log("DOM загружен, вызываем loadStaff()");
+//             loadStaff();
+//         });
+//         //loadStaff();
+//     }
+// }
 //---------------------------
 
 function loadStaff() {
@@ -160,29 +129,21 @@ function loadStaff() {
         method: 'GET',
         credentials: 'include'  // Это гарантирует, что сессионная кука будет отправляться с запросами
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log("data from fc loadStaff: ", data);
-            const staffTable = document.getElementById("staff-table");
-            console.log("staff-table:", staffTable);
-    
-            if (!staffTable) {
-                console.error("Error: staff-table element not found!");
-                return;
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Ошибка загрузки сотрудников: " + response.statusText);
             }
-    
-            const staff = data.team;
-            staffTable.innerHTML = staff.map(person => `
-                <tr>
-                    <td><img src="${person.avatar}" alt="Avatar" width="50"></td>
-                    <td>${person.name}</td>
-                    <td>${person.role}</td>
-                    <td>${person.email}</td>
-                    <td>${person.phone}</td>
-                </tr>
-            `).join("");
+            return response.json();
         })
-        .catch(error => console.error("Error loading staff data:", error));
+        .then(data => {
+            console.log("data from fc loadStaff - Загруженные сотрудники: ", data);
+            
+            renderStaffTable(data.team); // Отображаем сотрудников
+        })
+        .catch(error => {
+            console.error("Error loading staff data:", error)
+            document.getElementById("main_alue").innerHTML = "<h2>Ошибка загрузки данных</h2>";
+        });
 }
 
 // Функция для отображения данных профиля пользователя
@@ -195,4 +156,45 @@ function renderUserProfile(user) {
         <p><strong>Email:</strong> ${user.email}</p>
         <p><strong>Телефон:</strong> ${user.phone}</p>
     `;
+}
+
+// Функция для отрисовки таблицы сотрудников
+function renderStaffTable(staff) {
+    if (!Array.isArray(staff) || staff.length === 0) {
+        document.getElementById("main_alue").innerHTML += "<p>Нет данных для отображения</p>";
+        return;
+    }
+    
+    let tableHTML = `
+        </br>
+        <table border="1" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Avatar</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Desired Vacation Month</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    staff.forEach(person => {
+        tableHTML += `
+            <tr>
+                <td><img src="${person.avatar}" alt="${person.name}" width="50"></td>
+                <td>${person.name}</td>
+                <td>${person.role}</td>
+                <td>${person.email}</td>
+                <td>${person.phone}</td>
+                <td>${person.desiredVacationMonth || "Не указано"}</td>
+            </tr>
+        `;
+    });
+
+    tableHTML += `</tbody></table>`;
+
+    document.getElementById("main_alue").innerHTML += tableHTML;
 }
