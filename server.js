@@ -63,6 +63,25 @@ app.get("/api/user-role", (req, res) => {
     res.json({ role: req.session.user.role }); // Например, "admin" или "user"
 });
 
+// Эндпоинт для вывода данных сотрудников
+app.get('/api/user-profile', (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).json({ error: "Неавторизованный доступ" });
+    }
+
+    const { username, role } = req.session.user;
+
+    // Здесь можно подтягивать данные о пользователе из базы данных, если нужно
+    const userData = {
+        username,
+        role,
+        email: `${username}@webworksstudio.com`, // пример
+        phone: "+358 (XX) XXX-XXXX" // пример
+    };
+
+    res.json(userData);
+});
+
 // Middleware для защиты маршрутов
 function isAuthenticated(req, res, next) {
     console.log("Session in isAuthenticated:", req.session);  // Логируем сессию

@@ -91,7 +91,7 @@ window.loadPage = function (page) {
                     console.log("Вызываем loadStaff()");
                     loadStaff(); // Загружаем список сотрудников
                 } else if (role === "user") {
-                    document.getElementById("main_alue").innerHTML = "<h2>Ваши личные данные</h2>";
+                    console.log("Вызываем loadUserProfile()");
                     loadUserProfile(); // Загружаем личные данные
                 } else if (role === "guest") {
                     document.getElementById("main_alue").innerHTML = pages["henkilosto"]; // Показываем форму регистрации
@@ -123,15 +123,17 @@ function checkUserRole() {
 }
 
 function loadUserProfile() {
+    console.log("Запрашиваем данные профиля пользователя...");
     fetch("/api/user-profile", { credentials: "include" })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("main_alue").innerHTML = `
-                <h2>Ваш профиль</h2>
-                <p><strong>Имя:</strong> ${data.name}</p>
-                <p><strong>Email:</strong> ${data.email}</p>
-                <p><strong>Роль:</strong> ${data.role}</p>
-            `;
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Ошибка загрузки профиля");
+            }
+            return response.json();
+        })
+        .then(user => {
+            console.log("Данные профиля пользователя:", user);
+            renderUserProfile(user);
         })
         .catch(error => {
             console.error("Ошибка загрузки профиля:", error);
@@ -181,4 +183,16 @@ function loadStaff() {
             `).join("");
         })
         .catch(error => console.error("Error loading staff data:", error));
+}
+
+// Функция для отображения данных профиля пользователя
+function renderUserProfile(user) {
+    let mainAlue = document.getElementById("main_alue");
+    mainAlue.innerHTML = `
+        <h2>Профиль пользователя</h2>
+        <p><strong>Имя пользователя:</strong> ${user.username}</p>
+        <p><strong>Роль:</strong> ${user.role}</p>
+        <p><strong>Email:</strong> ${user.email}</p>
+        <p><strong>Телефон:</strong> ${user.phone}</p>
+    `;
 }
