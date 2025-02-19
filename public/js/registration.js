@@ -2,10 +2,9 @@
 
 document.addEventListener("submit", function (event) {
     const form = event.target;
-    console.log("Форма регистрации найдена", form);
+    
     if (form && form.id === "guestRegisterForm") {
             event.preventDefault();
-            console.log("Форма регистрации отправлена");
 
             const name = document.getElementById("name").value.trim();
             const email = document.getElementById("email").value.trim();

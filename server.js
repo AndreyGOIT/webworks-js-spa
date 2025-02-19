@@ -26,24 +26,28 @@ app.use(session({
     }
 }));
 
-// Имитация базы данных пользователей с ролями
-const users = [
-    { id: 1, username: 'admin', password: '1234', role: 'admin', email: 'admin@webworksstudio.com', phone: '1234567890' },
-    { id: 2, username: 'user', password: 'password', role: 'user', email: 'user@ewebworksstudio.com', phone: '9876543210' },
-    { id: 3, username: 'Janne Virtanen', password: 'Virtanen', role: 'user', email: 'janne@webworksstudio.com', phone: '+358 (22) 222-2222' },
-    { id: 4, username: 'Mikko Mäkinen', password: 'Mäkinen', role: 'user', email: 'mikko@webworksstudio.com', phone: '+358 (77) 777-7777' }
-];
+const fs = require("fs");
+const pathToLocalDB = "./data/employees.json";
+
+function loadUsers() {
+    const data = fs.readFileSync(pathToLocalDB, "utf8");
+    //console.log("Загруженная база данных:", data);
+    console.log("Загруженные пользователи:", JSON.parse(data).team);
+
+    return JSON.parse(data).team;
+}
 
 // Эндпоинт для логина
 app.post('/api/login', (req, res) => {
     console.log('Request body:', req.body);
     const { username, password } = req.body;
+    const users = loadUsers(); // Загружаем пользователей из файла
 
     // Ищем пользователя
-    const user = users.find(u => u.username === username && u.password === password);
+    const user = users.find(u => u.name === username && u.password === password);
 
     if (user) {
-        req.session.user = { username: user.username, role: user.role }; // Сохраняем и роль
+        req.session.user = { id: user.id, avatar: user.avatar, name: user.name, role: user.role, position: user.position, department: user.department, email: user.email, phone: user.phone, desiredVacationMonth: user.desiredVacationMonth }; // Сохраняем данные пользователя в сессии (кроме пароля)
 
         return req.session.save(err => {
             if (err) {
@@ -71,14 +75,18 @@ app.get('/api/user-profile', (req, res) => {
         return res.status(401).json({ error: "Неавторизованный доступ" });
     }
     console.log("данные профиля авторизованного пользователя: ", req.session.user);
-    const { username, role } = req.session.user;
+    const { avatar, name, role, position, department, email, phone, desiredVacationMonth } = req.session.user;
 
     // Здесь можно подтягивать данные о пользователе из базы данных, если нужно
     const userData = {
-        username,
+        avatar,
+        name,
         role,
-        email: `${username}@webworksstudio.com`, // пример
-        phone: "+358 (XX) XXX-XXXX" // пример
+        position,
+        department,
+        email,
+        phone,
+        desiredVacationMonth
     };
 
     res.json(userData);
@@ -134,7 +142,7 @@ app.get('/api/staff-limited', (req, res) => {
 });
 
 // Эндпоинт для регистрации гостя (сохранение данных в employees.json)
-const fs = require("fs");
+//const fs = require("fs");
 const path = require("path");
 
 app.post("/api/register-guest", (req, res) => {

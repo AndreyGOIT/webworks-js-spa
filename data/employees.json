@@ -1,24 +1,9 @@
 {
   "registeredUsers": [
     {
-      "name": "Test User",
-      "email": "user@mail.com",
-      "phone": "+358441234567"
-    },
-    {
-      "name": "Test User",
-      "email": "user@mail.com",
-      "phone": "+358441234567"
-    },
-    {
-      "name": "Test User",
-      "email": "user@mail.com",
-      "phone": "+358441234567"
-    },
-    {
-      "name": "Test User",
-      "email": "user@mail.com",
-      "phone": "+358441234567"
+      "name": "Visitor",
+      "email": "visitor@mail.com",
+      "phone": "+1234567890"
     }
   ],
   "team": [
@@ -26,8 +11,11 @@
       "id": 1,
       "avatar": "images/man-avatar.jpeg",
       "name": "Andy Erokhin",
-      "role": "Full Stack Developer",
+      "password": "1234", 
+      "role": "admin",
+      "position": "Full Stack Developer",
       "email": "aerokhin@webworksstudio.com",
+      "department": "Management",
       "phone": "+358 (11) 111-1111",
       "desiredVacationMonth": ""
     },
@@ -35,8 +23,11 @@
       "id": 2,
       "avatar": "images/man-avatar.jpeg",
       "name": "Janne Virtanen",
-      "role": "UI/UX Designer",
+      "password": "Virtanen", 
+      "role": "user",
+      "position": "UI/UX Designer",
       "email": "janne@webworksstudio.com",
+      "department": "Design",
       "phone": "+358 (22) 222-2222",
       "desiredVacationMonth": ""
     },
@@ -44,8 +35,11 @@
       "id": 3,
       "avatar": "/images/woman-avatar.jpeg",
       "name": "Laura Nieminen",
-      "role": "Projektipäällikkö",
+      "password": "Niemenen", 
+      "role": "user",
+      "position": "Projektipäällikkö",
       "email": "laura@webworksstudio.com",
+      "department": "Management",
       "phone": "+358 (33) 333-3333",
       "desiredVacationMonth": ""
     },
@@ -53,8 +47,11 @@
       "id": 4,
       "avatar": "images/man-avatar.jpeg",
       "name": "Mikko Salminen",
-      "role": "Back-End Developer",
+      "password": "Salminen", 
+      "role": "user",
+      "position": "Back-End Developer",
       "email": "mikko@webworksstudio.com",
+      "department": "Development",
       "phone": "+358 (44) 444-4444",
       "desiredVacationMonth": ""
     },
@@ -62,8 +59,11 @@
       "id": 5,
       "avatar": "images/woman-avatar.jpeg",
       "name": "Anna Korhonen",
-      "role": "Markkinointipäällikkö",
+      "password": "Korhonen", 
+      "role": "user",
+      "position": "Markkinointipäällikkö",
       "email": "anna@webworksstudio.com",
+      "department": "Marketing",
       "phone": "+358 (55) 555-5555",
       "desiredVacationMonth": ""
     },
@@ -71,8 +71,11 @@
       "id": 6,
       "avatar": "images/man-avatar.jpeg",
       "name": "Matti Meikäläinen",
-      "role": "Front-End Developer",
+      "password": "Meikäläinen", 
+      "role": "user",
+      "position": "Front-End Developer",
       "email": "matti@webworksstudio.com",
+      "department": "Development",
       "phone": "+358 (66) 666-6666",
       "desiredVacationMonth": ""
     },
@@ -80,8 +83,11 @@
       "id": 7,
       "avatar": "images/man-avatar.jpeg",
       "name": "Mikko Mäkinen",
-      "role": "Front-End Developer",
+      "password": "Mäkinen", 
+      "role": "user",
+      "position": "Front-End Developer",
       "email": "mikko@webworksstudio.com",
+      "department": "Development",
       "phone": "+358 (77) 777-7777",
       "desiredVacationMonth": ""
     }

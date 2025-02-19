@@ -68,7 +68,7 @@ window.loadPage = function (page) {
     if (page === "henkilosto") {
         checkUserRole()
             .then(role => {
-                console.log("Роль пользователя:", role);
+                console.log("Роль пользователя в Henkilöstö:", role);
                 if (role === "admin") {
                     console.log("проверка сравнения: ", role === "admin");
                     console.log("Admin вызывает loadStaff()");
@@ -76,10 +76,9 @@ window.loadPage = function (page) {
                     document.getElementById("main_alue").innerHTML = "Таблица сотрудников";
                     loadStaff(); // Загружаем список сотрудников
                 } else if (role === "user") {
-                    console.log("Вызываем loadUserProfile()");
+                    console.log("Вызываем loadUserProfile() в Henkilöstö");
                     loadUserProfile(); // Загружаем личные данные
                 } else if (role === "guest") {
-                    console.log("для гостя показываем форму регистрации");
                     document.getElementById("main_alue").innerHTML = pages["henkilosto"]; // Показываем форму регистрации
                 } else {
                     document.getElementById("main_alue").innerHTML = "<h2>Доступ запрещен. Пожалуйста, войдите.</h2>";
@@ -98,8 +97,8 @@ function checkUserRole() {
     return fetch("/api/user-role", { credentials: "include" })
         .then(response => response.json())
         .then(data => {
-            console.log("data.role in fc checkUserRole: ", data.role);
-            console.log("type of data.role in fc checkUserRole: ", typeof data.role);
+            //console.log("data.role in fc checkUserRole: ", data.role);
+            //console.log("type of data.role in fc checkUserRole: ", typeof data.role);
             return data.role; // Возвращает роль пользователя
         }) // Ожидается, что сервер вернет { role: "admin" | "user" | "guest" }
         .catch(error => {
@@ -154,11 +153,15 @@ function loadStaff() {
 function renderUserProfile(user) {
     let mainAlue = document.getElementById("main_alue");
     mainAlue.innerHTML = `
-        <h2>Профиль пользователя</h2>
-        <p><strong>Имя пользователя:</strong> ${user.username}</p>
-        <p><strong>Роль:</strong> ${user.role}</p>
+        <h2>Käyttäjäprofiili</h2>
+        <p><strong>Avatar:</strong><img src="${user.avatar}" width="150px"/></p>
+        <p><strong>Nimi:</strong> ${user.name}</p>
+        <p><strong>Role:</strong> ${user.role}</p>
+        <p><strong>Position:</strong> ${user.position}</p>
+        <p><strong>Department:</strong> ${user.department}</p>
         <p><strong>Email:</strong> ${user.email}</p>
         <p><strong>Телефон:</strong> ${user.phone}</p>
+        <p><strong>DesiredVacationMonth:</strong> ${user.desiredVacationMonth}</p>
     `;
 }
 
