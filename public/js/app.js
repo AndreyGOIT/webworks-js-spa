@@ -20,11 +20,11 @@ const pages = {
     <div><h2>“Teemme digitaalisen helpoksi”</h2></div>`,
     tuotteet: "<h2>Tuotteet</h2><p>Tässä on tuotteemme.</p>",
     yhteystiedot: "<h2>Yhteystiedot</h2><p>Ota yhteyttä meihin!</p>",
-    henkilosto: `<div class="container my-5">
+    henkilosto: `<div id="guestFormContainer" class="container my-5">
   <h2>Регистрация для доступа к персоналу</h2>
   
   <!-- Форма регистрации -->
-  <form id="registration-form">
+  <form id="guestRegisterForm">
     <div class="mb-3">
       <label for="name" class="form-label">Имя</label>
       <input type="text" class="form-control" id="name" required>
@@ -45,6 +45,22 @@ const pages = {
 
     <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
   </form>
+</div>
+<!-- Таблица с персоналом для зарегистрированных пользователей -->
+<div id="staffTableContainer" style="display: none;">
+    <h2>Персонал</h2>
+    <table id="staffTable" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Avatar</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Email</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 </div>`
 };
 
@@ -63,6 +79,7 @@ window.loadPage = function (page) {
                     console.log("Вызываем loadUserProfile()");
                     loadUserProfile(); // Загружаем личные данные
                 } else if (role === "guest") {
+                    console.log("для гостя показываем форму регистрации");
                     document.getElementById("main_alue").innerHTML = pages["henkilosto"]; // Показываем форму регистрации
                 } else {
                     document.getElementById("main_alue").innerHTML = "<h2>Доступ запрещен. Пожалуйста, войдите.</h2>";
@@ -109,19 +126,6 @@ function loadUserProfile() {
             document.getElementById("main_alue").innerHTML = "<h2>Ошибка загрузки профиля</h2>";
         });
 }
-//---old version loadPage----
-// function loadPage(page) {
-//     document.getElementById("main_alue").innerHTML = pages[page] || "<h2>Sivua ei löytynyt</h2>";
-
-//     if (page === "henkilosto") {
-//         document.addEventListener("DOMContentLoaded", function () {
-//             console.log("DOM загружен, вызываем loadStaff()");
-//             loadStaff();
-//         });
-//         //loadStaff();
-//     }
-// }
-//---------------------------
 
 function loadStaff() {
     console.log("loadStaff() запущен");
@@ -197,4 +201,25 @@ function renderStaffTable(staff) {
     tableHTML += `</tbody></table>`;
 
     document.getElementById("main_alue").innerHTML += tableHTML;
+}
+
+// Функция loadStaffLimited() для загрузки таблицы без колонки “месяц отпуска”
+function loadStaffLimited() {
+    fetch("/api/staff-limited")
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.querySelector("#staffTable tbody");
+            tableBody.innerHTML = "";
+
+            data.forEach(emp => {
+                const row = document.createElement("tr");
+                row.innerHTML = `<td><img src="${emp.avatar}" alt="${emp.name}" width="50"></td>
+                <td>${emp.name}</td>
+                <td>${emp.position}</td>
+                <td>${emp.email}</td>
+                <td>${emp.phone}</td>`;
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error("Ошибка загрузки сотрудников:", error));
 }

@@ -117,6 +117,54 @@ app.get('/api/staff', isAuthenticated, (req, res) => {
     res.json(employees);
 });
 
+// Эндпоинт для вывода данных сотрудников для пользователя guest
+app.get('/api/staff-limited', (req, res) => {
+    //console.log("Персонал для гостя:", employees.team);
+
+    const limitedData = employees.team.map(emp => ({
+        id: emp.id,
+        avatar: emp.avatar,
+        name: emp.name,
+        position: emp.role,
+        email: emp.email,
+        phone: emp.phone
+        // НЕ добавляем месяц отпуска
+    }));
+    res.json(limitedData);
+});
+
+// Эндпоинт для регистрации гостя (сохранение данных в employees.json)
+const fs = require("fs");
+const path = require("path");
+
+app.post("/api/register-guest", (req, res) => {
+    //console.log("Request body in endpoint register-guest:", req.body);
+    const { name, email, phone } = req.body;
+
+    if (!name || !email || !phone) {
+        return res.status(400).json({ success: false, error: "Заполните все поля" });
+    }
+
+    // Проверка успешного добавления в employees.json
+    try {
+        const fs = require("fs");
+        const employees = JSON.parse(fs.readFileSync("./data/employees.json", "utf8"));
+
+        employees.registeredUsers.push({
+            name,
+            email,
+            phone
+        });
+
+        fs.writeFileSync("./data/employees.json", JSON.stringify(employees, null, 2));
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error("Ошибка записи в файл:", error);
+        res.status(500).json({ success: false, error: "Ошибка сервера" });
+    }
+});
+
 // Эндпоинт для выхода
 app.post('/api/logout', (req, res) => {
     req.session.destroy(() => {
