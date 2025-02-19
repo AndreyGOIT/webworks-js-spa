@@ -18,51 +18,257 @@ const pages = {
         </div>
     </div>
     <div><h2>“Teemme digitaalisen helpoksi”</h2></div>`,
-    tuotteet: "<h2>Tuotteet</h2><p>Tässä on tuotteemme.</p>",
-    yhteystiedot: "<h2>Yhteystiedot</h2><p>Ota yhteyttä meihin!</p>",
+    tuotteet: `<section class="bg-light py-5 palvelut-main">
+                <div class="container">
+                    <h1 class="text-center">Tuotteet ja Palvelut</h1>
+                    <p class="text-center">Alta löydät WebWorks Studion tarjoamat palvelut ja tuotteet.</p>
+                    <div class="table-responsive shadow-sm rounded">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Palvelu / Tuote</th>
+                            <th>Kuvaus</th>
+                            <th>Toimitusaika</th>
+                            <th>Hinta</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><button onclick="loadPage('verkkosivustonKehitys')">Verkkosivuston kehitys</button></td>
+                            <td>Responsiivisten ja räätälöityjen verkkosivustojen suunnittelu ja toteutus</td>
+                            <td>Alkaen 2 viikkoa</td>
+                            <td>1500 €</td>
+                        </tr>
+                        <tr>
+                            <td>Ylläpito ja tuki</td>
+                            <td>Sisällön päivitys, virheiden korjaus ja sivuston seuranta</td>
+                            <td>Kuukausittain</td>
+                            <td>300 € / kuukausi</td>
+                        </tr>
+                        <tr>
+                            <td><a href="/sovelluskehitys">Verkkosovellusten kehitys</a></td>
+                            <td>Monimutkaisten verkkosovellusten kehitys nykyaikaisilla teknologioilla</td>
+                            <td>Alkaen 1 kuukausi</td>
+                            <td>2500 €</td>
+                        </tr>
+                        <tr>
+                            <td><a href="/hakukoneoptimointi">SEO-optimointi</a></td>
+                            <td>Sivuston näkyvyyden parantaminen hakukoneissa</td>
+                            <td>2–4 viikkoa</td>
+                            <td>800 €</td>
+                        </tr>
+                        <tr>
+                            <td>Hosting ja domain</td>
+                            <td>Verkkotunnusten rekisteröinti ja hosting-palvelut</td>
+                            <td>1–2 päivää</td>
+                            <td>50 € / kuukausi</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                <div class="container mt-5">
+                    <h2 class="text-center">Käytämme moderneja teknologioita kehitystyössämme</h2>
+                    <p class="text-center">WebWorks Studio käyttää nykyaikaisia teknologioita ja työkaluja kehitystyössämme.</p>
+                    <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <div class="ratio ratio-16x9">
+                        <iframe src="https://www.youtube.com/embed/bMknfKXIFA8" title="React-aloitusopas" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <p>
+                        WebWorks Studio on sitoutunut käyttämään viimeisimpiä ja tehokkaimpia kehitystyökaluja tarjotakseen parhaan mahdollisen kokemuksen asiakkaillemme.
+                        Yksi merkittävistä teknologioista, joita käytämme verkkosivustojen ja sovellusten kehityksessä, on
+                        <a href="https://react.dev/" target="_blank">React</a>.
+                        </p>
+                        <p>
+                        React on suosittu JavaScript-kirjasto, joka mahdollistaa responsiivisten ja interaktiivisten käyttöliittymien luomisen nopeasti ja tehokkaasti.
+                        Reactin avulla voimme rakentaa monipuolisia ja helposti laajennettavia ratkaisuja, jotka vastaavat asiakkaidemme tarpeisiin ja toimivat saumattomasti eri laitteilla.
+                        </p>
+                        <p>
+                        Valitsemalla WebWorks Studion voit olla varma, että projektisi toteutetaan laadukkaasti ja modernien kehitysstandardien mukaisesti.
+                        </p>
+                    </div>
+                    </div>
+                </div>
+                </section>`,
+    yhteystiedot: `<section class="bg-light py-5">
+                    <!-- Yhteystiedot Container -->
+                    <div class="container py-4">
+                        <h1 class="text-center">Yhteystiedot</h1>
+                        <!-- Контейнер для контактной информации и карты -->
+                        <div class="row py-3">
+                        <!-- Koodilohko yhteystiedoilla -->
+                        <div class="col-md-6 text-center">
+                            <address>
+                            <p><strong>WebWorks Studio Oy</strong></p>
+                            <p>
+                                Osoite:
+                                <a href="https://www.google.com/maps/search/?api=1&query=Hevosenkengänkatu+2,+06100+Porvoo" target="_blank">
+                                Hevosenkengänkatu 2, 06100, Porvoo
+                                </a>
+                            </p>
+                            <p>
+                                Email:
+                                <a href="mailto:info@webworksstudio.com">info@webworksstudio.com</a>
+                            </p>
+                            <p>Puhelin: <a href="tel:+358XXXXXXXXX">+358 (XX) XXX-XXXX</a></p>
+                            <p>
+                                Web-sivusto:
+                                <a href="#" onclick="return false;">https://www.webworksstudio.fi</a>
+                            </p>
+                            </address>
+                        </div>
+                        <!-- Koodilohko kartalla -->
+                        <div class="col-md-6 text-center">
+                            <h4>Sijainti: Hevosenkengänkatu 2, 06100 Porvoo</h4>
+                            <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1993.313202080589!2d25.66350721622751!3d60.39333998197305!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x469206b59ae2c1a3%3A0xa31b92f47b8fdadb!2sHevosenkeng%C3%A4nkatu%202%2C%2006100%20Porvoo%2C%20Finland!5e0!3m2!1sen!2sfi!4v1698146940844!5m2!1sen!2sfi"
+                            width="100%"
+                            height="300"
+                            style="border: 0"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            ></iframe>
+                        </div>
+                        </div>
+                    </div>
+                    </section>`,
     henkilosto: `<div id="guestFormContainer" class="container my-5">
-  <h2>Rekisteröidy päästäksesi henkilökunnalle</h2>
-  
-  <!-- Ilmoittautumislomake -->
-  <form id="guestRegisterForm">
-    <div class="mb-3">
-      <label for="name" class="form-label">Nimi</label>
-      <input type="text" class="form-control" id="name" required>
-      <div id="nameError" class="invalid-feedback">Anna nimesi (vain kirjaimet).</div>
-    </div>
+                    <h2>Rekisteröidy päästäksesi henkilökunnalle</h2>
+                    
+                    <!-- Ilmoittautumislomake -->
+                    <form id="guestRegisterForm">
+                        <div class="mb-3">
+                        <label for="name" class="form-label">Nimi</label>
+                        <input type="text" class="form-control" id="name" required>
+                        <div id="nameError" class="invalid-feedback">Anna nimesi (vain kirjaimet).</div>
+                        </div>
 
-    <div class="mb-3">
-      <label for="email" class="form-label">Email</label>
-      <input type="email" class="form-control" id="email" required>
-      <div id="emailError" class="invalid-feedback">Anna kelvollinen sähköpostiosoite.</div>
-    </div>
+                        <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required>
+                        <div id="emailError" class="invalid-feedback">Anna kelvollinen sähköpostiosoite.</div>
+                        </div>
 
-    <div class="mb-3">
-      <label for="phone" class="form-label">Puhelin</label>
-      <input type="text" class="form-control" id="phone" required>
-      <div id="phoneError" class="invalid-feedback">Anna kelvollinen puhelinnumero.</div>
-    </div>
+                        <div class="mb-3">
+                        <label for="phone" class="form-label">Puhelin</label>
+                        <input type="text" class="form-control" id="phone" required>
+                        <div id="phoneError" class="invalid-feedback">Anna kelvollinen puhelinnumero.</div>
+                        </div>
 
-    <button type="submit" class="btn btn-primary">Rekisteröidy</button>
-  </form>
-</div>
-<!-- Henkilökuntapöytä rekisteröityneille käyttäjille -->
-<div id="staffTableContainer" style="display: none;">
-    <h2>WebWorks Studion henkilökunta</h2>
-    </br>
-    <table id="staffTable" class="table table-striped">
-        <thead>
-            <tr>
-                <th>Avatar</th>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Email</th>
-                <th>Phone</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-</div>`
+                        <button type="submit" class="btn btn-primary">Rekisteröidy</button>
+                    </form>
+                    </div>
+                    <!-- Henkilökuntapöytä rekisteröityneille käyttäjille -->
+                    <div id="staffTableContainer" style="display: none;">
+                        <h2>WebWorks Studion henkilökunta</h2>
+                        </br>
+                        <table id="staffTable" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Avatar</th>
+                                    <th>Name</th>
+                                    <th>Position</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>`,
+    verkkosivustonKehitys: `<section class="bg-light py-5">
+                            <div class="container">
+                                <h1 class="text-center">Verkkosivuston kehitys</h1>
+                                <p class="text-center">
+                                WebWorks Studio tarjoaa räätälöityjä ja responsiivisia verkkosivustoja,
+                                jotka on suunniteltu vastaamaan asiakkaidemme tarpeisiin. Teemme
+                                verkkosivustojen kehittämisestä helppoa ja tehokasta.
+                                </p>
+                                <div class="row align-items-center">
+                                <div class="col-lg-6 col-md-6 mb-4">
+                                    <img
+                                    src="images/istockphoto-verkkosivuston-kehitys-1024x1024.jpg"
+                                    alt="Verkkosivuston kehitys"
+                                    class="img-fluid rounded"
+                                    />
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <h2>Palvelun ominaisuudet</h2>
+                                    <ul>
+                                    <li>Moderni ja käyttäjäystävällinen muotoilu</li>
+                                    <li>Responsiivinen ulkoasu mobiili- ja työpöytälaitteille</li>
+                                    <li>Hakukoneoptimoitu sisältö</li>
+                                    <li>Integraatiot sosiaalisen median ja analytiikkatyökalujen kanssa</li>
+                                    </ul>
+                                    <h2>Toimitusaika ja hinta</h2>
+                                    <p><strong>Toimitusaika:</strong> alkaen 2 viikkoa</p>
+                                    <p><strong>Hinta:</strong> 1500 €</p>
+                                    <button onclick="loadPage('tuotteet')">Takaisin tuotteisiin ja palveluihin</button>
+                                </div>
+                                </div>
+                            </div>
+                            </section>
+                            `,
+    sovelluskehitys: `<section class="py-5 bg-light">
+                        <div class="container py-4">
+                            <h1 class="text-center">Sovelluskehitys</h1>
+                            <p class="text-center lead">
+                            WebWorks Studio kehittää monipuolisia ja tehokkaita mobiili- ja verkkosovelluksia, jotka auttavat yrityksiä digitalisoitumaan ja parantamaan asiakaskokemusta.
+                            </p>
+                            <div class="row align-items-center py-4">
+                            <div class="col-lg-6 mb-4">
+                                <img src="images/istockphoto-sovelluskehitys-1024x1024.jpg" alt="Sovelluskehitys" class="img-fluid rounded shadow">
+                            </div>
+                            <div class="col-lg-6">
+                                <h2 class="h4">Palvelun ominaisuudet</h2>
+                                <ul class="list-group list-group-flush mb-3">
+                                <li class="list-group-item">Räätälöidyt sovellukset yrityksen tarpeisiin</li>
+                                <li class="list-group-item">Yhteensopivuus eri alustojen kanssa (iOS, Android, web)</li>
+                                <li class="list-group-item">Käyttäjäystävällinen ja intuitiivinen käyttöliittymä</li>
+                                <li class="list-group-item">Turvallinen ja skaalautuva ratkaisu</li>
+                                </ul>
+                                <h2 class="h4">Toimitusaika ja hinta</h2>
+                                <p><strong>Toimitusaika:</strong> alkaen 3 viikkoa</p>
+                                <p><strong>Hinta:</strong> 2500 €</p>
+                                <a href="/palvelut" class="btn btn-primary mt-3">Takaisin tuotteisiin ja palveluihin</a>
+                            </div>
+                            </div>
+                        </div>
+                        </section>`,
+    hakukoneoptimointi: `<section class="container py-5 bg-light text-dark">
+                        <!-- SEO Service Container -->
+                        <div class="container text-center">
+                            <h1 class="mb-4">Hakukoneoptimointi (SEO)</h1>
+                            <p class="lead">
+                            Hakukoneoptimointi auttaa yritystäsi erottumaan hakukoneiden tuloksissa. WebWorks Studio tarjoaa SEO-palveluita, jotka parantavat
+                            sivustosi näkyvyyttä ja liikennettä.
+                            </p>
+                        </div>
+
+                        <div class="row align-items-center py-4">
+                            <!-- Image Section -->
+                            <div class="col-lg-6 mb-4 mb-lg-0">
+                            <img src="images/istockphoto-SEO-1024x1024.jpg" alt="Hakukoneoptimointi (SEO)" class="img-fluid rounded shadow-sm" />
+                            </div>
+                            <!-- Service Details Section -->
+                            <div class="col-lg-6">
+                            <h2 class="h4">Palvelun ominaisuudet</h2>
+                            <ul class="list-group list-group-flush mb-4">
+                                <li class="list-group-item">Avainsanatutkimus ja kilpailija-analyysi</li>
+                                <li class="list-group-item">Sisällön optimointi ja metatietojen parantaminen</li>
+                                <li class="list-group-item">Sivuston tekninen optimointi</li>
+                                <li class="list-group-item">Kuukausittainen raportointi ja jatkuva seuranta</li>
+                            </ul>
+                            <h2 class="h4">Toimitusaika ja hinta</h2>
+                            <p><strong>Toimitusaika:</strong> jatkuva palvelu</p>
+                            <p><strong>Hinta:</strong> 500 €</p>
+                            <a href="/palvelut" class="btn btn-primary mt-3">Takaisin tuotteisiin ja palveluihin</a>
+                            </div>
+                        </div>
+                        </section>`,
 };
 
 window.loadPage = function (page) {

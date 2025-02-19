@@ -108,7 +108,7 @@ function isAuthenticated(req, res, next) {
 
 // Эндпоинт для проверки авторизации
 app.get('/api/check-auth', (req, res) => {
-    console.log('Session in chek-auth:', req.session);  // Лог сессии
+    //console.log('Session in chek-auth:', req.session);  // Лог сессии
     
     if (req.session.user) {
         return res.json({ isAuthenticated: true, user: req.session.user });
