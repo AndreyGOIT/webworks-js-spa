@@ -133,7 +133,7 @@ app.get('/api/staff-limited', (req, res) => {
         id: emp.id,
         avatar: emp.avatar,
         name: emp.name,
-        position: emp.role,
+        position: emp.position,
         email: emp.email,
         phone: emp.phone
         // НЕ добавляем месяц отпуска

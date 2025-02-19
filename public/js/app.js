@@ -21,34 +21,35 @@ const pages = {
     tuotteet: "<h2>Tuotteet</h2><p>Tässä on tuotteemme.</p>",
     yhteystiedot: "<h2>Yhteystiedot</h2><p>Ota yhteyttä meihin!</p>",
     henkilosto: `<div id="guestFormContainer" class="container my-5">
-  <h2>Регистрация для доступа к персоналу</h2>
+  <h2>Rekisteröidy päästäksesi henkilökunnalle</h2>
   
-  <!-- Форма регистрации -->
+  <!-- Ilmoittautumislomake -->
   <form id="guestRegisterForm">
     <div class="mb-3">
-      <label for="name" class="form-label">Имя</label>
+      <label for="name" class="form-label">Nimi</label>
       <input type="text" class="form-control" id="name" required>
-      <div id="nameError" class="invalid-feedback">Пожалуйста, введите ваше имя (только буквы).</div>
+      <div id="nameError" class="invalid-feedback">Anna nimesi (vain kirjaimet).</div>
     </div>
 
     <div class="mb-3">
       <label for="email" class="form-label">Email</label>
       <input type="email" class="form-control" id="email" required>
-      <div id="emailError" class="invalid-feedback">Пожалуйста, введите корректный email.</div>
+      <div id="emailError" class="invalid-feedback">Anna kelvollinen sähköpostiosoite.</div>
     </div>
 
     <div class="mb-3">
-      <label for="phone" class="form-label">Телефон</label>
+      <label for="phone" class="form-label">Puhelin</label>
       <input type="text" class="form-control" id="phone" required>
-      <div id="phoneError" class="invalid-feedback">Пожалуйста, введите корректный номер телефона.</div>
+      <div id="phoneError" class="invalid-feedback">Anna kelvollinen puhelinnumero.</div>
     </div>
 
-    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+    <button type="submit" class="btn btn-primary">Rekisteröidy</button>
   </form>
 </div>
-<!-- Таблица с персоналом для зарегистрированных пользователей -->
+<!-- Henkilökuntapöytä rekisteröityneille käyttäjille -->
 <div id="staffTableContainer" style="display: none;">
-    <h2>Персонал</h2>
+    <h2>WebWorks Studion henkilökunta</h2>
+    </br>
     <table id="staffTable" class="table table-striped">
         <thead>
             <tr>
@@ -154,15 +155,27 @@ function renderUserProfile(user) {
     let mainAlue = document.getElementById("main_alue");
     mainAlue.innerHTML = `
         <h2>Käyttäjäprofiili</h2>
-        <p><strong>Avatar:</strong><img src="${user.avatar}" width="150px"/></p>
-        <p><strong>Nimi:</strong> ${user.name}</p>
-        <p><strong>Role:</strong> ${user.role}</p>
-        <p><strong>Position:</strong> ${user.position}</p>
-        <p><strong>Department:</strong> ${user.department}</p>
-        <p><strong>Email:</strong> ${user.email}</p>
-        <p><strong>Телефон:</strong> ${user.phone}</p>
-        <p><strong>DesiredVacationMonth:</strong> ${user.desiredVacationMonth}</p>
-    `;
+        <div class="card mb-3" style="max-width: 540px;">
+            <div class="row g-0">
+                <div class="col-md-4">
+                <img src="${user.avatar}" class="img-fluid rounded-start" alt="${user.name}">
+                </div>
+                <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">${user.name}</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><p class="card-text"><strong>Position:</strong> ${user.position}</p></li>
+                        <li class="list-group-item"><p class="card-text"><strong>Department:</strong> ${user.department}</p></li>
+                        <li class="list-group-item"><p class="card-text"><strong>Email:</strong> ${user.email}</p></li>
+                        <li class="list-group-item"><p class="card-text"><strong>Phone:</strong> ${user.phone}</p></li>
+                        <li class="list-group-item"><p class="card-text"><strong>DesiredVacationMonth:</strong> ${user.desiredVacationMonth}</p></li>
+                    </ul>
+                    <p class="card-text"><small class="text-body-secondary">Role: ${user.role}</small></p>
+                </div>
+                </div>
+            </div>
+            </div>
+            `;
 }
 
 // Функция для отрисовки таблицы сотрудников
