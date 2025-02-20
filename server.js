@@ -47,7 +47,7 @@ app.post('/api/login', (req, res) => {
     const user = users.find(u => u.name === username && u.password === password);
 
     if (user) {
-        req.session.user = { id: user.id, avatar: user.avatar, name: user.name, role: user.role, position: user.position, department: user.department, email: user.email, phone: user.phone, desiredVacationMonth: user.desiredVacationMonth }; // Сохраняем данные пользователя в сессии (кроме пароля)
+        req.session.user = { id: user.id, avatar: user.avatar, name: user.name, role: user.role, position: user.position, department: user.department, email: user.email, phone: user.phone, desiredVacationMonth: user.desiredVacationMonth, approvedVacationMonth: user.approvedVacationMonth }; // Сохраняем данные пользователя в сессии (кроме пароля)
 
         return req.session.save(err => {
             if (err) {
@@ -75,7 +75,7 @@ app.get('/api/user-profile', (req, res) => {
         return res.status(401).json({ error: "Неавторизованный доступ" });
     }
     console.log("данные профиля авторизованного пользователя: ", req.session.user);
-    const { id, avatar, name, role, position, department, email, phone, desiredVacationMonth } = req.session.user;
+    const { id, avatar, name, role, position, department, email, phone, desiredVacationMonth, approvedVacationMonth } = req.session.user;
 
     // Здесь можно подтягивать данные о пользователе из базы данных, если нужно
     const userData = {
@@ -87,7 +87,8 @@ app.get('/api/user-profile', (req, res) => {
         department,
         email,
         phone,
-        desiredVacationMonth
+        desiredVacationMonth,
+        approvedVacationMonth
     };
 
     res.json(userData);
@@ -220,6 +221,52 @@ app.post("/api/register-guest", (req, res) => {
     //     res.status(500).json({ success: false, error: "Ошибка сервера" });
     // }
 });
+
+// Эндпоинт для обработки кнопок Admin
+app.get("/api/get-vacation-requests", (req, res) => {
+    const dataStore = require("./data/dataStore.json");
+    res.json({ requests: dataStore.vacationRequests });
+});
+
+app.post("/api/approve-vacation", (req, res) => {
+    const { userId } = req.body;
+    let dataStore = require("./data/dataStore.json");
+
+    let request = dataStore.vacationRequests.find(r => r.userId === userId);
+    console.log("request в approve-vacation: ",request);
+    let user = dataStore.team.find(u => u.id === +userId);
+    console.log("user в approve-vacation: ",user);
+    if (request && user) {
+        request.status = "approved";
+
+        // Форматируем дату как "19.02.2025 14:30"
+        const now = new Date();
+        const formattedDate = `${now.getDate().toString().padStart(2, '0')}.${(now.getMonth() + 1).toString().padStart(2, '0')}.${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+        request.approvedDate = formattedDate; // Записываем дату одобрения
+        user.approvedVacationMonth = request.month; // Фиксируем утвержденный месяц отпуска
+
+        fs.writeFileSync("./data/dataStore.json", JSON.stringify(dataStore, null, 2));
+        res.json({ success: true });
+    } else {
+        res.json({ success: false, error: "Запрос или сотрудник не найден" });
+    }
+});
+
+app.post("/api/decline-vacation", (req, res) => {
+    const { userId } = req.body;
+    let dataStore = require("./data/dataStore.json");
+
+    let request = dataStore.vacationRequests.find(r => r.userId === userId);
+    if (request) {
+        request.status = "declined";
+        fs.writeFileSync("./data/dataStore.json", JSON.stringify(dataStore, null, 2));
+        res.json({ success: true });
+    } else {
+        res.json({ success: false, error: "Запрос не найден" });
+    }
+});
+//--окончание эндпоинта для обработки кнопок Admin----
 
 // Эндпоинт для выхода
 app.post('/api/logout', (req, res) => {

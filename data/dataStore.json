@@ -4,21 +4,6 @@
       "name": "Visitor",
       "email": "visitor@mail.com",
       "phone": "+1234567890"
-    },
-    {
-      "name": "Test User",
-      "email": "user@mail.com",
-      "phone": "+358441234567"
-    },
-    {
-      "name": "Test User",
-      "email": "user@mail.com",
-      "phone": "+358441234567"
-    },
-    {
-      "name": "test",
-      "email": "test@gmail.com",
-      "phone": "+12334567890"
     }
   ],
   "team": [
@@ -44,7 +29,8 @@
       "email": "janne@webworksstudio.com",
       "department": "Design",
       "phone": "+358 (22) 222-2222",
-      "desiredVacationMonth": ""
+      "desiredVacationMonth": "",
+      "approvedVacationMonth": ""
     },
     {
       "id": 3,
@@ -108,11 +94,5 @@
     }
   ],
   "vacationRequests": [
-    {
-      "userId": "2",
-      "name": "Janne Virtanen",
-      "month": "December",
-      "status": "pending"
-    }
   ]
 }

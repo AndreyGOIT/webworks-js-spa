@@ -271,17 +271,28 @@ const pages = {
                         </section>`,
 };
 
-window.loadPage = function (page) {
+window.loadPage = async function (page) {
     if (page === "henkilosto") {
-        checkUserRole()
-            .then(role => {
+        try {
+                const role = await checkUserRole() // Ждём завершения проверки роли
+            
                 console.log("Роль пользователя в Henkilöstö:", role);
                 if (role === "admin") {
-                    console.log("проверка сравнения: ", role === "admin");
                     console.log("Admin вызывает loadStaff()");
-                    document.getElementById("main_alue").innerHTML = ""; // Очищаем содержимое main_alue
-                    document.getElementById("main_alue").innerHTML = "<h3>Täysi henkilökuntataulukko järjestelmänvalvojalle</h3>";
-                    loadStaff(); // Загружаем список сотрудников
+
+                    let mainAlue = document.getElementById("main_alue");
+                    mainAlue.innerHTML = "<h3>Täysi henkilökuntataulukko järjestelmänvalvojalle</h3>";
+
+                    await loadStaff(); // Загружаем список сотрудников
+                    console.log("Таблица сотрудников загружена");
+
+                    // Создаём div для adminPanel, если его ещё нет
+                    let adminPanel = document.createElement("div");
+                    adminPanel.id = "adminPanel";
+                    mainAlue.appendChild(adminPanel); // Добавляем в main_alue
+
+                    console.log("AdminPanel добавлен в DOM");
+                    renderAdminPanel(); // Отображаем панель администратора
                 } else if (role === "user") {
                     console.log("Вызываем loadUserProfile() в Henkilöstö");
                     loadUserProfile(); // Загружаем личные данные
@@ -290,11 +301,10 @@ window.loadPage = function (page) {
                 } else {
                     document.getElementById("main_alue").innerHTML = "<h2>Доступ запрещен. Пожалуйста, войдите.</h2>";
                 }
-            })
-            .catch(error => {
-                console.error("Ошибка при проверке роли:", error);
+            } catch(error) {
+                console.error("Ошибка загрузки страницы: ", error);
                 document.getElementById("main_alue").innerHTML = "<h2>Ошибка загрузки данных</h2>";
-            });
+            };
     } else {
         document.getElementById("main_alue").innerHTML = pages[page] || "<h2>Sivua ei löytynyt</h2>";
     }
@@ -333,27 +343,21 @@ function loadUserProfile() {
         });
 }
 
-function loadStaff() {
+async function loadStaff() {
     console.log("loadStaff() запущен");
-    fetch("/api/staff", {
-        method: 'GET',
-        credentials: 'include'  // Это гарантирует, что сессионная кука будет отправляться с запросами
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Ошибка загрузки сотрудников: " + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("data from fc loadStaff - Загруженные сотрудники: ", data);
-            
-            renderStaffTable(data.team); // Отображаем сотрудников
-        })
-        .catch(error => {
-            console.error("Error loading staff data:", error)
-            document.getElementById("main_alue").innerHTML = "<h2>Ошибка загрузки данных</h2>";
+    try {
+        let response = await fetch("/api/staff", {
+            method: 'GET',
+            credentials: 'include'  // Это гарантирует, что сессионная кука будет отправляться с запросами
         });
+        let data = await response.json();
+
+        console.log("data from fc loadStaff - Загруженные сотрудники: ", data);
+        renderStaffTable(data.team); // Отображаем сотрудников
+    } catch (error) {
+        console.error("Error loading staff data:", error)
+        document.getElementById("main_alue").innerHTML = "<h2>Ошибка загрузки данных</h2>";
+    }
 }
 
 // Функция для отображения данных профиля пользователя
@@ -376,7 +380,7 @@ function renderUserProfile(user) {
                                 <li class="list-group-item"><p class="card-text"><strong>Email:</strong> ${user.email}</p></li>
                                 <li class="list-group-item"><p class="card-text"><strong>Phone:</strong> ${user.phone}</p></li>
                                 <li class="list-group-item">
-                                    <strong>DesiredVacationMonth:</strong> $<select id="vacationMonth" class="form-select">
+                                    <strong>Desired Vacation Month:</strong> <select id="vacationMonth" class="form-select">
                                         <option value="" disabled selected>Valitse kuukausi</option>
                                         <option value="January">January</option>
                                         <option value="February">February</option>
@@ -392,6 +396,7 @@ function renderUserProfile(user) {
                                         <option value="December">December</option>
                                     </select>
                                 </li>
+                                <li class="list-group-item"><p class="card-text"><strong>Approved Vacation Month:</strong> ${user.approvedVacationMonth}</p></li>
                             </ul>
                             <p class="card-text"><small class="text-body-secondary">Role: ${user.role}</small></p>
                             <button class="btn btn-primary mt-3" onclick="submitVacationRequest('${user.id}')">Отправить запрос</button>
@@ -448,7 +453,7 @@ function renderStaffTable(staff) {
                     <th>Role</th>
                     <th>Email</th>
                     <th>Phone</th>
-                    <th>Desired Vacation Month</th>
+                    <th>Approved Vacation Month</th>
                 </tr>
             </thead>
             <tbody>
@@ -464,7 +469,7 @@ function renderStaffTable(staff) {
                 <td>${person.role}</td>
                 <td>${person.email}</td>
                 <td>${person.phone}</td>
-                <td>${person.desiredVacationMonth || "Не указано"}</td>
+                <td>${person.approvedVacationMonth || "Ei määritelty"}</td>
             </tr>
         `;
     });
@@ -493,4 +498,82 @@ function loadStaffLimited() {
             });
         })
         .catch(error => console.error("Ошибка загрузки сотрудников:", error));
+}
+
+// Функция для отрисовки административной панели с таблицей сотрудников с выбранным месяцем отпуска
+function renderAdminPanel() {
+    fetch("/api/get-vacation-requests")
+        .then(response => response.json())
+        .then(data => {
+            let tableContent = data.requests.map(req => `
+                <tr>
+                    <td>${req.name}</td>
+                    <td>${req.month}</td>
+                    <td>${req.status === "pending" ? "Odottamassa" : req.status}</td>
+                    <td>${req.status === "pending" ? "Ei määritelty" : req.approvedDate}</td>
+                    <td>
+                        ${req.status === "pending" ? `
+                            <button class="btn btn-success btn-sm" onclick="approveRequest('${req.userId}')">✅</button>
+                            <button class="btn btn-danger btn-sm" onclick="declineRequest('${req.userId}')">❌</button>
+                        ` : ""}
+                    </td>
+                </tr>
+            `).join("");
+
+            document.getElementById("adminPanel").innerHTML = "";
+            document.getElementById("adminPanel").innerHTML += `
+                </br>
+                <h2 class="text-center">Lomapyynnöt</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Työntekijä</th>
+                            <th>Kuukausi</th>
+                            <th>Tila</th>
+                            <th>Päivämäärä</th>
+                            <th>Toiminnot</th>
+                        </tr>
+                    </thead>
+                    <tbody>${tableContent}</tbody>
+                </table>
+            `;
+        })
+        .catch(error => console.error("Ошибка загрузки запросов:", error));
+}
+
+// Функции для кнопок одобрения и отклонения (Admin)
+function approveRequest(userId) {
+    fetch("/api/approve-vacation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Запрос одобрен!");
+            renderAdminPanel();
+        } else {
+            alert("Ошибка: " + data.error);
+        }
+    })
+    .catch(error => console.error("Ошибка:", error));
+}
+
+function declineRequest(userId) {
+    fetch("/api/decline-vacation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Запрос отклонен!");
+            renderAdminPanel();
+        } else {
+            alert("Ошибка: " + data.error);
+        }
+    })
+    .catch(error => console.error("Ошибка:", error));
 }
