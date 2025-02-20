@@ -375,9 +375,26 @@ function renderUserProfile(user) {
                                 <li class="list-group-item"><p class="card-text"><strong>Department:</strong> ${user.department}</p></li>
                                 <li class="list-group-item"><p class="card-text"><strong>Email:</strong> ${user.email}</p></li>
                                 <li class="list-group-item"><p class="card-text"><strong>Phone:</strong> ${user.phone}</p></li>
-                                <li class="list-group-item"><p class="card-text"><strong>DesiredVacationMonth:</strong> ${user.desiredVacationMonth}</p></li>
+                                <li class="list-group-item">
+                                    <strong>DesiredVacationMonth:</strong> $<select id="vacationMonth" class="form-select">
+                                        <option value="" disabled selected>Valitse kuukausi</option>
+                                        <option value="January">January</option>
+                                        <option value="February">February</option>
+                                        <option value="March">March</option>
+                                        <option value="April">April</option>
+                                        <option value="May">May</option>
+                                        <option value="June">June</option>
+                                        <option value="July">July</option>
+                                        <option value="August">August</option>
+                                        <option value="September">September</option>
+                                        <option value="October">October</option>
+                                        <option value="November">November</option>
+                                        <option value="December">December</option>
+                                    </select>
+                                </li>
                             </ul>
                             <p class="card-text"><small class="text-body-secondary">Role: ${user.role}</small></p>
+                            <button class="btn btn-primary mt-3" onclick="submitVacationRequest('${user.id}')">Отправить запрос</button>
                         </div>
                     </div>
                 </div>

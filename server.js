@@ -32,7 +32,7 @@ app.use(session({
 function loadUsers() {
     const data = fs.readFileSync(pathToLocalDB, "utf8");
     //console.log("Загруженная база данных:", data);
-    console.log("Загруженные пользователи:", JSON.parse(data).team);
+    //console.log("Загруженные пользователи:", JSON.parse(data).team);
 
     return JSON.parse(data).team;
 }
