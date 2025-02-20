@@ -3,6 +3,8 @@ const cors = require('cors');
 const dataStore = require('./data/dataStore.json');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
+const fs = require("fs");
+const pathToLocalDB = "./data/dataStore.json";
 
 const app = express();
 const PORT = 3000;
@@ -26,8 +28,6 @@ app.use(session({
     }
 }));
 
-const fs = require("fs");
-const pathToLocalDB = "./data/dataStore.json";
 
 function loadUsers() {
     const data = fs.readFileSync(pathToLocalDB, "utf8");
@@ -142,35 +142,57 @@ app.get('/api/staff-limited', (req, res) => {
 });
 
 // Эндпоинт для регистрации гостя (сохранение данных в dataStore.json)
-//const fs = require("fs");
 const path = require("path");
+//const dataFilePath = path.join(__dirname, "dataStore.json");
 
 app.post("/api/register-guest", (req, res) => {
-    //console.log("Request body in endpoint register-guest:", req.body);
     const { name, email, phone } = req.body;
 
     if (!name || !email || !phone) {
         return res.status(400).json({ success: false, error: "Заполните все поля" });
     }
 
-    // Проверка успешного добавления в dataStore.json
-    try {
-        const fs = require("fs");
-        const dataStore = JSON.parse(fs.readFileSync("./data/dataStore.json", "utf8"));
+    // Проверяем, есть ли пользователь в registeredUsers
+    const userExists = dataStore.registeredUsers.some(user => user.email === email);
 
-        dataStore.registeredUsers.push({
-            name,
-            email,
-            phone
-        });
+    if (userExists) {
+        // Если пользователь уже зарегистрирован, отправляем таблицу персонала
+        return res.json({ success: false, alreadyRegistered: true });
+    }
 
-        fs.writeFileSync("./data/dataStore.json", JSON.stringify(dataStore, null, 2));
+    // Если пользователя нет в базе, регистрируем его
+    const newUser = { name, email, phone };
+    dataStore.registeredUsers.push(newUser);
+
+    // Сохраняем изменения в файле
+    const fs = require("fs");
+    fs.writeFile("./data/dataStore.json", JSON.stringify(dataStore, null, 2), (err) => {
+        if (err) {
+            console.error("Ошибка записи в dataStore.json:", err);
+            return res.status(500).json({ success: false, error: "Ошибка сохранения данных." });
+        }
 
         res.json({ success: true });
-    } catch (error) {
-        console.error("Ошибка записи в файл:", error);
-        res.status(500).json({ success: false, error: "Ошибка сервера" });
-    }
+    });
+
+    // Проверка успешного добавления в dataStore.json
+    // try {
+    //     const fs = require("fs");
+    //     const dataStore = JSON.parse(fs.readFileSync("./data/dataStore.json", "utf8"));
+
+    //     dataStore.registeredUsers.push({
+    //         name,
+    //         email,
+    //         phone
+    //     });
+
+    //     fs.writeFileSync("./data/dataStore.json", JSON.stringify(dataStore, null, 2));
+
+    //     res.json({ success: true });
+    // } catch (error) {
+    //     console.error("Ошибка записи в файл:", error);
+    //     res.status(500).json({ success: false, error: "Ошибка сервера" });
+    // }
 });
 
 // Эндпоинт для выхода

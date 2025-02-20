@@ -1,6 +1,6 @@
 // Обработка submit формы регистрации посетителя
 
-document.addEventListener("submit", function (event) {
+document.addEventListener("submit", async function (event) {
     const form = event.target;
     
     if (form && form.id === "guestRegisterForm") {
@@ -26,13 +26,16 @@ document.addEventListener("submit", function (event) {
                     alert("Регистрация успешна!");
                     document.getElementById("guestFormContainer").style.display = "none";
                     document.getElementById("staffTableContainer").style.display = "block";
-                    loadStaffLimited(); // Загружаем таблицу без месяца отпуска
+                    loadStaffLimited(); // Загружаем таблицу
+                } else if (data.alreadyRegistered) {
+                    alert("Вы уже зарегистрированы! Переход к таблице персонала.");
+                    document.getElementById("guestFormContainer").style.display = "none";
+                    document.getElementById("staffTableContainer").style.display = "block";
+                    loadStaffLimited(); // Загружаем таблицу
                 } else {
-                    alert("Ошибка получения данных при регистрации: " + data.error);
+                    alert("Ошибка регистрации: " + data.error);
                 }
             })
-            .catch(error => console.error("Ошибка api регистрации гостя: ", error));
-    } else {
-        console.error("Ошибка: форма регистрации не найдена!");
-    }
+            .catch(error => console.error("Ошибка API регистрации гостя: ", error));
+        }
 });

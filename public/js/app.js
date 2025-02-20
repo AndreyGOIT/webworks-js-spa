@@ -280,7 +280,7 @@ window.loadPage = function (page) {
                     console.log("проверка сравнения: ", role === "admin");
                     console.log("Admin вызывает loadStaff()");
                     document.getElementById("main_alue").innerHTML = ""; // Очищаем содержимое main_alue
-                    document.getElementById("main_alue").innerHTML = "Таблица сотрудников";
+                    document.getElementById("main_alue").innerHTML = "<h3>Täysi henkilökuntataulukko järjestelmänvalvojalle</h3>";
                     loadStaff(); // Загружаем список сотрудников
                 } else if (role === "user") {
                     console.log("Вызываем loadUserProfile() в Henkilöstö");
@@ -360,27 +360,29 @@ function loadStaff() {
 function renderUserProfile(user) {
     let mainAlue = document.getElementById("main_alue");
     mainAlue.innerHTML = `
-        <h2>Käyttäjäprofiili</h2>
-        <div class="card mb-3" style="max-width: 540px;">
-            <div class="row g-0">
-                <div class="col-md-4">
-                <img src="${user.avatar}" class="img-fluid rounded-start" alt="${user.name}">
-                </div>
-                <div class="col-md-8">
-                <div class="card-body">
-                    <h5 class="card-title">${user.name}</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><p class="card-text"><strong>Position:</strong> ${user.position}</p></li>
-                        <li class="list-group-item"><p class="card-text"><strong>Department:</strong> ${user.department}</p></li>
-                        <li class="list-group-item"><p class="card-text"><strong>Email:</strong> ${user.email}</p></li>
-                        <li class="list-group-item"><p class="card-text"><strong>Phone:</strong> ${user.phone}</p></li>
-                        <li class="list-group-item"><p class="card-text"><strong>DesiredVacationMonth:</strong> ${user.desiredVacationMonth}</p></li>
-                    </ul>
-                    <p class="card-text"><small class="text-body-secondary">Role: ${user.role}</small></p>
-                </div>
+        <h3 class="text-center">Käyttäjäprofiili</h3>
+        <div class="d-flex justify-content-center">  <!-- Центрирование -->
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4 d-flex align-items-stretch">
+                        <img src="${user.avatar}" class="img-fluid rounded-start w-100 h-100 object-fit-cover" alt="${user.name}">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">${user.name}</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><p class="card-text"><strong>Position:</strong> ${user.position}</p></li>
+                                <li class="list-group-item"><p class="card-text"><strong>Department:</strong> ${user.department}</p></li>
+                                <li class="list-group-item"><p class="card-text"><strong>Email:</strong> ${user.email}</p></li>
+                                <li class="list-group-item"><p class="card-text"><strong>Phone:</strong> ${user.phone}</p></li>
+                                <li class="list-group-item"><p class="card-text"><strong>DesiredVacationMonth:</strong> ${user.desiredVacationMonth}</p></li>
+                            </ul>
+                            <p class="card-text"><small class="text-body-secondary">Role: ${user.role}</small></p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            </div>
+        </div>
             `;
 }
 
@@ -398,6 +400,8 @@ function renderStaffTable(staff) {
                 <tr>
                     <th>Avatar</th>
                     <th>Name</th>
+                    <th>Department</th>
+                    <th>Position</th>
                     <th>Role</th>
                     <th>Email</th>
                     <th>Phone</th>
@@ -412,6 +416,8 @@ function renderStaffTable(staff) {
             <tr>
                 <td><img src="${person.avatar}" alt="${person.name}" width="50"></td>
                 <td>${person.name}</td>
+                <td>${person.department}</td>
+                <td>${person.position}</td>
                 <td>${person.role}</td>
                 <td>${person.email}</td>
                 <td>${person.phone}</td>
