@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const employees = require('./data/employees.json');
+const dataStore = require('./data/dataStore.json');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
 
@@ -27,7 +27,7 @@ app.use(session({
 }));
 
 const fs = require("fs");
-const pathToLocalDB = "./data/employees.json";
+const pathToLocalDB = "./data/dataStore.json";
 
 function loadUsers() {
     const data = fs.readFileSync(pathToLocalDB, "utf8");
@@ -122,14 +122,14 @@ app.get('/api/check-auth', (req, res) => {
 app.get('/api/staff', isAuthenticated, (req, res) => {
     console.log("Session data:", req.session);
     console.log("User data:", req.session.user);
-    res.json(employees);
+    res.json(dataStore);
 });
 
 // Эндпоинт для вывода данных сотрудников для пользователя guest
 app.get('/api/staff-limited', (req, res) => {
-    //console.log("Персонал для гостя:", employees.team);
+    //console.log("Персонал для гостя:", dataStore.team);
 
-    const limitedData = employees.team.map(emp => ({
+    const limitedData = dataStore.team.map(emp => ({
         id: emp.id,
         avatar: emp.avatar,
         name: emp.name,
@@ -141,7 +141,7 @@ app.get('/api/staff-limited', (req, res) => {
     res.json(limitedData);
 });
 
-// Эндпоинт для регистрации гостя (сохранение данных в employees.json)
+// Эндпоинт для регистрации гостя (сохранение данных в dataStore.json)
 //const fs = require("fs");
 const path = require("path");
 
@@ -153,18 +153,18 @@ app.post("/api/register-guest", (req, res) => {
         return res.status(400).json({ success: false, error: "Заполните все поля" });
     }
 
-    // Проверка успешного добавления в employees.json
+    // Проверка успешного добавления в dataStore.json
     try {
         const fs = require("fs");
-        const employees = JSON.parse(fs.readFileSync("./data/employees.json", "utf8"));
+        const dataStore = JSON.parse(fs.readFileSync("./data/dataStore.json", "utf8"));
 
-        employees.registeredUsers.push({
+        dataStore.registeredUsers.push({
             name,
             email,
             phone
         });
 
-        fs.writeFileSync("./data/employees.json", JSON.stringify(employees, null, 2));
+        fs.writeFileSync("./data/dataStore.json", JSON.stringify(dataStore, null, 2));
 
         res.json({ success: true });
     } catch (error) {
