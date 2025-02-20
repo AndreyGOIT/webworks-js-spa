@@ -75,10 +75,11 @@ app.get('/api/user-profile', (req, res) => {
         return res.status(401).json({ error: "Неавторизованный доступ" });
     }
     console.log("данные профиля авторизованного пользователя: ", req.session.user);
-    const { avatar, name, role, position, department, email, phone, desiredVacationMonth } = req.session.user;
+    const { id, avatar, name, role, position, department, email, phone, desiredVacationMonth } = req.session.user;
 
     // Здесь можно подтягивать данные о пользователе из базы данных, если нужно
     const userData = {
+        id,
         avatar,
         name,
         role,
@@ -90,6 +91,31 @@ app.get('/api/user-profile', (req, res) => {
     };
 
     res.json(userData);
+});
+
+//API для обработки запроса на утверждение отпуска
+app.post("/api/request-vacation", (req, res) => {
+    console.log("тело боди в API запроса на утверждение: ",req.body);
+    const { userId, month } = req.body;
+    const dataStore = require("./data/dataStore.json");
+    console.log("проверка типа получаемого userId: ", typeof userId);
+    console.log("проверка типа получаемого userId с плюсом: ", typeof +userId);
+    console.log("id в профиле Virtanen: ",dataStore.team[1].id);
+    const user = dataStore.team.find(u => u.id === +userId);
+    console.log("данные пользователя в API запроса на утверждение: ",user);
+    if (!user) {
+        return res.json({ success: false, error: "Пользователь не найден" });
+    }
+
+    // Добавляем запрос в список ожидающих
+    const newRequest = { userId, name: user.name, month, status: "pending" };
+    console.log("newRequest в API на запрос: ",newRequest);
+    dataStore.vacationRequests.push(newRequest);
+
+    // Записываем изменения
+    fs.writeFileSync("./data/dataStore.json", JSON.stringify(dataStore, null, 2));
+
+    res.json({ success: true });
 });
 
 // Middleware для защиты маршрутов

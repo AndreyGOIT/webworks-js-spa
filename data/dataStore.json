@@ -106,5 +106,13 @@
       "phone": "+358 (77) 777-7777",
       "desiredVacationMonth": ""
     }
+  ],
+  "vacationRequests": [
+    {
+      "userId": "2",
+      "name": "Janne Virtanen",
+      "month": "December",
+      "status": "pending"
+    }
   ]
 }

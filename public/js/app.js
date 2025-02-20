@@ -403,6 +403,32 @@ function renderUserProfile(user) {
             `;
 }
 
+// Функция для отправки запроса на сервер
+function submitVacationRequest(userId) {
+    console.log("id пользователя в функции отпрвки запроса: ", userId);
+    const selectedMonth = document.getElementById("vacationMonth").value;
+    
+    if (!selectedMonth) {
+        alert("Выберите месяц отпуска!");
+        return;
+    }
+
+    fetch("/api/request-vacation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, month: selectedMonth })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Запрос отправлен на рассмотрение!");
+        } else {
+            alert("Ошибка: " + data.error);
+        }
+    })
+    .catch(error => console.error("Ошибка при отправке запроса:", error));
+}
+
 // Функция для отрисовки таблицы сотрудников
 function renderStaffTable(staff) {
     if (!Array.isArray(staff) || staff.length === 0) {
