@@ -19,6 +19,11 @@ button {
   color: aliceblue;
 }
 
+/* Подгонка заголовка */
+header .navbar-brand img {
+  max-height: 35px;
+}
+
 td,
 th {
   padding: 8px;
@@ -114,9 +119,27 @@ th {
   border-radius: 5px;
   text-align: left;
 }
-.some {
+/* .some {
   margin: 0;
   padding: 60px 5px;
+} */
+.footer-row.some {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; /* Расстояние между кнопками */
+}
+
+.footer-row.some a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px; /* Фиксированный размер кнопки */
+  height: 40px;
+  padding: 0;
+  border-radius: 50%; /* Округлые кнопки */
 }
 /* Styles for henkilosto */
 .invalid-feedback {
@@ -192,7 +215,10 @@ input.is-valid {
   .slogan-text {
     font-size: 2rem !important;
   }
-  
+  .footer-row.some {
+    display: flex;
+    flex-wrap:nowrap;
+  }
 }
 
 @media screen and (max-width: 425px) {
@@ -211,6 +237,69 @@ input.is-valid {
   }
   .slogan-text {
     font-size: 1rem !important;
+  }
+
+  /* Контейнеры с небольшими отступами */
+  .container {
+    padding: 0 10px;
+  }
+
+  /* Логотип и кнопка бургера выровнены */
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+  }
+
+  /* Блок навигации */
+  .navbar-collapse {
+    text-align: center;
+  }
+
+  .nav-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  /* Основной контент */
+  #main_alue {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  /* Подвал адаптирован для узких экранов */
+  .footer-row {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .footer-row-item {
+    width: 100%;
+  }
+
+  /* Социальные сети выстроены в ряд */
+  .footer-row.some {
+    flex-wrap: nowrap; /* Принудительно не позволять перенос */
+    justify-content: center;
+  }
+  
+  /* .footer-row.some a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px; 
+    height: 35px;
+    padding: 0;
+    border-radius: 50%; 
+  } */
+
+  /* Логотип в подвале уменьшен */
+  .logo-bottom {
+    width: 40px;
   }
   
 }

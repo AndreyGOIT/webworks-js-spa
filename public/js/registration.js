@@ -1,4 +1,4 @@
-// Обработка submit формы регистрации посетителя
+// Vierailijarekisteröintilomakkeen lähetystä käsitellään tässä
 
 document.addEventListener("submit", async function (event) {
     const form = event.target;
