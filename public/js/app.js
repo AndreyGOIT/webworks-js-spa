@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 const pages = {
     home: `<div class='hero-img'>
-    <h1>WebWorks Studio</h1>
+    <h1 class="hero-title">WebWorks Studio</h1>
     </div>
     <div class='content-block'>
         <img src='/images/slogan_kuva.png' alt='Company slogan image' class='slogan-img'>

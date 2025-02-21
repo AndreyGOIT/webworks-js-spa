@@ -102,6 +102,7 @@ function addMessage(message) {
   const chatBox = document.getElementById("chat-content");
   const newMessage = document.createElement("p");
   newMessage.textContent = message;
+  newMessage.classList.add("chat-message");
   chatBox.appendChild(newMessage);
   chatBox.scrollTop = chatBox.scrollHeight; // Asettaa viestin viimeisimmäksi
 }
