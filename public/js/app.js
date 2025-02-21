@@ -10,14 +10,14 @@ const pages = {
         <img src='/images/slogan_kuva.png' alt='Company slogan image' class='slogan-img'>
         <div class='content-text'>
             <h2>ABOUT WebWorks Studio</h2>
-            <p>WebWorks Studio on nykyaikainen ohjelmistokehityksen yritys, joka keskittyy täyden palvelun verkkosivustojen ja sovellusten suunnitteluun ja toteutukseen. Tarjoamme räätälöityjä ratkaisuja, jotka vastaavat asiakkaidemme tarpeita ja auttavat heidän liiketoimintaansa kasvamaan digitaalisessa ympäristössä.
+            <p class="content-text-about">WebWorks Studio on nykyaikainen ohjelmistokehityksen yritys, joka keskittyy täyden palvelun verkkosivustojen ja sovellusten suunnitteluun ja toteutukseen. Tarjoamme räätälöityjä ratkaisuja, jotka vastaavat asiakkaidemme tarpeita ja auttavat heidän liiketoimintaansa kasvamaan digitaalisessa ympäristössä.
             <br/>
             Olemme ylpeitä siitä, että yhdistämme luovuuden, teknisen asiantuntemuksen ja nykyaikaiset teknologiat tuottaaksemme korkealaatuisia ja käyttäjäystävällisiä verkkopalveluita. Olipa kyseessä yrityksen kotisivu, verkkokauppa tai räätälöity sovellus, tiimimme huolehtii koko kehitysprosessista alusta loppuun.
             <br/>
             Laita ideasi käytäntöön WebWorks Studion kanssa!</p>
         </div>
     </div>
-    <div><h2>“Teemme digitaalisen helpoksi”</h2></div>`,
+    <div class="slogan"><h2 class="slogan-text">“Teemme digitaalisen helpoksi”</h2></div>`,
     tuotteet: `<section class="bg-light py-5 palvelut-main">
                 <div class="container">
                     <h1 class="text-center">Tuotteet ja Palvelut</h1>
@@ -34,7 +34,7 @@ const pages = {
                         </thead>
                         <tbody>
                         <tr>
-                            <td><button onclick="loadPage('verkkosivustonKehitys')">Verkkosivuston kehitys</button></td>
+                            <td><button onclick="loadPage('verkkosivustonKehitys')" class="link-button">Verkkosivuston kehitys</button></td>
                             <td>Responsiivisten ja räätälöityjen verkkosivustojen suunnittelu ja toteutus</td>
                             <td>Alkaen 2 viikkoa</td>
                             <td>1500 €</td>
@@ -46,13 +46,13 @@ const pages = {
                             <td>300 € / kuukausi</td>
                         </tr>
                         <tr>
-                            <td><a href="/sovelluskehitys">Verkkosovellusten kehitys</a></td>
+                            <td><button onclick="loadPage('sovelluskehitys')" class="link-button">Verkkosovellusten kehitys</button></td>
                             <td>Monimutkaisten verkkosovellusten kehitys nykyaikaisilla teknologioilla</td>
                             <td>Alkaen 1 kuukausi</td>
                             <td>2500 €</td>
                         </tr>
                         <tr>
-                            <td><a href="/hakukoneoptimointi">SEO-optimointi</a></td>
+                            <td><button onclick="loadPage('hakukoneoptimointi')" class="link-button">SEO-optimointi</button></td>
                             <td>Sivuston näkyvyyden parantaminen hakukoneissa</td>
                             <td>2–4 viikkoa</td>
                             <td>800 €</td>
@@ -206,7 +206,7 @@ const pages = {
                                     <h2>Toimitusaika ja hinta</h2>
                                     <p><strong>Toimitusaika:</strong> alkaen 2 viikkoa</p>
                                     <p><strong>Hinta:</strong> 1500 €</p>
-                                    <button onclick="loadPage('tuotteet')">Takaisin tuotteisiin ja palveluihin</button>
+                                    <button onclick="loadPage('tuotteet')" class="link-button">Takaisin tuotteisiin ja palveluihin</button>
                                 </div>
                                 </div>
                             </div>
@@ -233,7 +233,7 @@ const pages = {
                                 <h2 class="h4">Toimitusaika ja hinta</h2>
                                 <p><strong>Toimitusaika:</strong> alkaen 3 viikkoa</p>
                                 <p><strong>Hinta:</strong> 2500 €</p>
-                                <a href="/palvelut" class="btn btn-primary mt-3">Takaisin tuotteisiin ja palveluihin</a>
+                                <button onclick="loadPage('tuotteet')" class="link-button">Takaisin tuotteisiin ja palveluihin</button>
                             </div>
                             </div>
                         </div>
@@ -265,7 +265,7 @@ const pages = {
                             <h2 class="h4">Toimitusaika ja hinta</h2>
                             <p><strong>Toimitusaika:</strong> jatkuva palvelu</p>
                             <p><strong>Hinta:</strong> 500 €</p>
-                            <a href="/palvelut" class="btn btn-primary mt-3">Takaisin tuotteisiin ja palveluihin</a>
+                            <button onclick="loadPage('tuotteet')" class="link-button">Takaisin tuotteisiin ja palveluihin</button>
                             </div>
                         </div>
                         </section>`,

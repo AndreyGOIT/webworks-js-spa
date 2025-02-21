@@ -9,7 +9,7 @@
   "team": [
     {
       "id": 1,
-      "avatar": "images/man-avatar.jpeg",
+      "avatar": "images/male-avatar-portrait-of-a-young-man-with-a-beard-illustration-of-male-character-in-modern-color-style-vector.jpg",
       "name": "Andy Erokhin",
       "password": "1234",
       "role": "admin",
@@ -21,7 +21,7 @@
     },
     {
       "id": 2,
-      "avatar": "images/man-avatar.jpeg",
+      "avatar": "images/male-avatar-portrait-of-a-young-man-with-glasses-illustration-of-male-character-in-modern-color-style-vector2.jpg",
       "name": "Janne Virtanen",
       "password": "Virtanen",
       "role": "user",
@@ -58,7 +58,7 @@
     },
     {
       "id": 5,
-      "avatar": "images/woman-avatar.jpeg",
+      "avatar": "images/woman-avatar-brun.jpeg",
       "name": "Anna Korhonen",
       "password": "Korhonen",
       "role": "user",
@@ -82,7 +82,7 @@
     },
     {
       "id": 7,
-      "avatar": "images/man-avatar.jpeg",
+      "avatar": "images/male-avatar-portrait-of-a-young-man-with-glasses-illustration-of-male-character-in-modern-color-style-vector2.jpg",
       "name": "Mikko Mäkinen",
       "password": "Mäkinen",
       "role": "user",
