@@ -6,13 +6,19 @@ const bcrypt = require('bcrypt');
 const fs = require("fs");
 const pathToLocalDB = "./data/dataStore.json";
 
+const http = require('http');
+const { Server } = require('socket.io');
+
 const app = express();
-const PORT = 3000;
 
 app.use(cors({
     origin: 'http://localhost:5500',  // Адрес фронта
     credentials: true  // Разрешает отправку cookie
 }));
+
+const server = http.createServer(app);
+const io = new Server(server);
+
 app.use(express.static('public'));
 app.use(express.json());
 
@@ -28,6 +34,32 @@ app.use(session({
     }
 }));
 
+//--------------socket.io--------------
+io.on('connection', (socket) => {
+    console.log('Käyttäjä yhdistetty:', socket.id);
+
+    // Processing the entrance to the chat
+  socket.on("join", (name) => {
+    socket.username = name; // Save the username
+    io.emit("join", name); // We notify all users
+  });
+
+  // Processing message sending
+  socket.on("message", (data) => {
+    io.emit("message", { sender: socket.username, text: data.text });
+  });
+
+  // Handling exit from chat
+  socket.on("leave", (name) => {
+    io.emit("leave", name);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Käyttäjä katkaisi yhteyden");
+  });
+});
+//--------------------------------------
+
 
 function loadUsers() {
     const data = fs.readFileSync(pathToLocalDB, "utf8");
@@ -37,6 +69,7 @@ function loadUsers() {
     return JSON.parse(data).team;
 }
 
+//---------endpoints----------
 // Эндпоинт для логина
 app.post('/api/login', (req, res) => {
     console.log('Request body:', req.body);
@@ -94,6 +127,7 @@ app.get('/api/user-profile', (req, res) => {
     res.json(userData);
 });
 
+//------------REST API palvelin-----------
 //API для обработки запроса на утверждение отпуска
 app.post("/api/request-vacation", (req, res) => {
     console.log("тело боди в API запроса на утверждение: ",req.body);
@@ -276,6 +310,9 @@ app.post('/api/logout', (req, res) => {
 });
 
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+//----------palvelimen käynnistys----------
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`Example app listening on port ${PORT}!`);    
 });
+//-----------------------------------------

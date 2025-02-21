@@ -78,6 +78,37 @@
     <!-- main osio -->
     <main class="container my-5" >
       <div id="main_alue">Tervetuloa WebWorks Studioon!</div>
+      <!------------------------CHAT--------------------------->
+      <div class="hidden">
+        <!-- Floating button  -->
+        <div div id="chat-button">💬</div>
+
+        <!-- Modal name window -->
+        <div id="customPrompt" class="modal">
+          <div class="modal-content">
+            <h2>Enter your name for chat</h2>
+            <input type="text" id="promptInput" placeholder="your name">
+            <button class="promtpBtn" onclick="resolvePrompt()">OK</button>
+            <button class="promtpBtn" onclick="rejectPrompt()">Cancel</button>
+          </div>
+        </div>
+
+        <!-- Modal chat window -->
+        <div id="chat-modal">
+          <div id="chat-header">
+            <span>Support chat</span>
+            <button id="close-chat">&times;</button>
+          </div>
+          <div id="chat-content"></div>
+          <input
+            type="text"
+            id="chat-input"
+            placeholder="Write a message..."
+          />
+          <button id="send-message">Send</button>
+        </div>
+      </div>
+<!----------------------- end CHAT --------------------------->
     </main>
 
     <footer id="footer-main" class="container-fluid  text-white py-4">
@@ -204,6 +235,8 @@
 
     <script src="js/registration.js" async></script>
     <script src="js/app.js" async></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="js/socket.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", checkAuthStatus);
 
