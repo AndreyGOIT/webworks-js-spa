@@ -112,7 +112,7 @@
           </div>
         </div>
       </div>
-<!----------------------- end CHAT --------------------------->
+      <!----------------------- end CHAT --------------------------->
     </main>
 
     <footer id="footer-main" class="container-fluid  text-white py-4">
@@ -195,7 +195,7 @@
       </div>
       </footer>
 
-    <!-- Modaalinen kirjautumisikkuna -->
+    <!--------- Modaalinen kirjautumisikkuna ------->
     <div
       class="modal fade"
       id="loginModal"
@@ -236,6 +236,7 @@
         </div>
       </div>
     </div>
+    <!-------- end Modaalinen kirjautumisikkuna ---->
 
     <script src="js/registration.js" async></script>
     <script src="js/app.js" async></script>
@@ -281,7 +282,7 @@
             })
           .then(data => {
               console.log("Выход выполнен:", data.message);
-              checkAuthStatus(); // Обновляем интерфейс (скрываем/показываем кнопки)
+              checkAuthStatus(); // Käyttöliittymän päivittäminen (painikkeiden piilottaminen/näyttäminen)
               loadPage('home');
           })
           .catch((error) => console.error('Virhe:", error'));
@@ -312,10 +313,10 @@
 
         if (isLoggedIn) {
           loginBtn.classList.add("d-none");
-          logoutBtn.classList.remove("d-none"); // Show Logout
+          logoutBtn.classList.remove("d-none"); // Show Logout btn
         } else {
           loginBtn.classList.remove("d-none");
-          logoutBtn.classList.add("d-none"); // Hiding Logout
+          logoutBtn.classList.add("d-none"); // Hiding Logout btn
         }
       }
     </script>
