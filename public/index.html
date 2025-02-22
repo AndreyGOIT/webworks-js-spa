@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-    <header class="py-3" >
+    <header class="py-2" >
       <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light m-0" >
           <button
@@ -23,9 +23,12 @@
             <img
               src="./images/Logo_WebWorks_Studio.png"
               alt="Logo"
-              height="40"
+              height="50"
             />
-            WebWorks Studio
+            <div class="brand-text">
+              WebWorks Studio
+              <span id="auth-username"></span>
+            </div>
           </button>
           <!-- nav btns -->
           <button
@@ -295,14 +298,14 @@
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log("Server response:", data);
-            console.log("data.isAuthenticated: ", data.isAuthenticated);
-            updateAuthUI(data.isAuthenticated);
+            // console.log("Server response:", data);
+            // console.log("data.isAuthenticated: ", data.isAuthenticated);
+            updateAuthUI(data.isAuthenticated, data.user.name);
           })
           .catch(() => updateAuthUI(false));
       }
 
-      function updateAuthUI(isLoggedIn) {
+      function updateAuthUI(isLoggedIn, username) {
         let loginBtn = document.getElementById("login-button");
         let logoutBtn = document.getElementById("logout-button");
 
@@ -314,9 +317,12 @@
         if (isLoggedIn) {
           loginBtn.classList.add("d-none");
           logoutBtn.classList.remove("d-none"); // Show Logout btn
+          
+          document.getElementById("auth-username").textContent = username; // Show username in navbar
         } else {
           loginBtn.classList.remove("d-none");
           logoutBtn.classList.add("d-none"); // Hiding Logout btn
+          document.getElementById("auth-username").textContent = ""; // Hide username in navbar
         }
       }
     </script>

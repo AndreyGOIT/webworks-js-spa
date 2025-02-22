@@ -19,11 +19,33 @@ button {
   color: aliceblue;
 }
 
-/* Подгонка заголовка */
-header .navbar-brand img {
-  max-height: 35px;
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* font-size: 14px; */
 }
 
+/* Подгонка заголовка */
+/* header .navbar-brand img {
+  max-height: 45px;
+} */
+/* Стили для бренда и имени пользователя */
+.brand-text {
+  display: flex;
+  flex-direction: column; /* Текст в две строки */
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#auth-username {
+  font-size: 18px;
+  color: #164681; /* Можно сделать серым */
+  font-weight: bold;
+}
+
+/* Стили для таблицы */
 td,
 th {
   padding: 8px;
@@ -248,8 +270,9 @@ input.is-valid {
   .navbar-brand {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 10px;
     font-size: 14px;
+    margin: 0;
   }
 
   /* Блок навигации */

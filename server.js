@@ -64,7 +64,7 @@ io.on('connection', (socket) => {
 function loadUsers() {
     const data = fs.readFileSync(pathToLocalDB, "utf8");
     //console.log("Загруженная база данных:", data);
-    //console.log("Загруженные пользователи:", JSON.parse(data).team);
+    // console.log("Загруженные пользователи:", JSON.parse(data).team);
 
     return JSON.parse(data).team;
 }
@@ -72,7 +72,7 @@ function loadUsers() {
 //---------endpoints----------
 // Эндпоинт для логина
 app.post('/api/login', (req, res) => {
-    console.log('Request body:', req.body);
+    // console.log('Request body:', req.body);
     const { username, password } = req.body;
     const users = loadUsers(); // Загружаем пользователей из файла
 
@@ -107,7 +107,7 @@ app.get('/api/user-profile', (req, res) => {
     if (!req.session.user) {
         return res.status(401).json({ error: "Неавторизованный доступ" });
     }
-    console.log("данные профиля авторизованного пользователя: ", req.session.user);
+    // console.log("данные профиля авторизованного пользователя: ", req.session.user);
     const { id, avatar, name, role, position, department, email, phone, desiredVacationMonth, approvedVacationMonth } = req.session.user;
 
     // Здесь можно подтягивать данные о пользователе из базы данных, если нужно
