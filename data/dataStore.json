@@ -4,6 +4,11 @@
       "name": "Visitor",
       "email": "visitor@mail.com",
       "phone": "+1234567890"
+    },
+    {
+      "name": "Test User",
+      "email": "user@mail.com",
+      "phone": "+358441234567"
     }
   ],
   "team": [
@@ -54,7 +59,8 @@
       "email": "mikko@webworksstudio.com",
       "department": "Development",
       "phone": "+358 (44) 444-4444",
-      "desiredVacationMonth": ""
+      "desiredVacationMonth": "",
+      "approvedVacationMonth": "November"
     },
     {
       "id": 5,
@@ -91,17 +97,17 @@
       "email": "mikko@webworksstudio.com",
       "department": "Development",
       "phone": "+358 (77) 777-7777",
-      "desiredVacationMonth": ""
+      "desiredVacationMonth": "",
+      "approvedVacationMonth": "August"
     }
   ],
   "vacationRequests": [
-    
     {
-      "userId": "5",
-      "name": "Anna Korhonen",
-      "month": "June",
+      "userId": "4",
+      "name": "Mikko Salminen",
+      "month": "November",
       "status": "approved",
-      "approvedDate": "21.02.2025 17:18"
+      "approvedDate": "23.02.2025 16:30"
     }
   ]
 }

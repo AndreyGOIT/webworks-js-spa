@@ -259,7 +259,7 @@
           credentials: "include", // TÄRKEÄÄ: Evästeiden lähettäminen istunnon mukana
         })
           .then((response) => {
-            console.log("ответ response при логине: ", response);
+            // console.log("response response when logging in: ", response);
             if (response.ok) {
               checkAuthStatus(); // Tarkista tila heti sisäänkirjautumisen jälkeen
               bootstrap.Modal.getInstance(
@@ -279,12 +279,12 @@
         })
           .then(response => {
               if (!response.ok) {
-                  throw new Error("Ошибка выхода: " + response.statusText);
+                  throw new Error("Exit error: " + response.statusText);
               }
               return response.json();
             })
           .then(data => {
-              console.log("Выход выполнен:", data.message);
+              // console.log("The exit is complete:", data.message);
               checkAuthStatus(); // Käyttöliittymän päivittäminen (painikkeiden piilottaminen/näyttäminen)
               loadPage('home');
           })
@@ -310,7 +310,7 @@
         let logoutBtn = document.getElementById("logout-button");
 
         if (!logoutBtn) {
-          console.error("Logout button не найден в DOM!");
+          console.error("Logout button not found in DOM!");
           return;
         }
 

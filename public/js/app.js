@@ -277,15 +277,15 @@ window.loadPage = async function (page) {
                 const role = await checkUserRole() // Odotetaan roolin vahvistuksen valmistumista
             
                 if (role === "admin") {
-                    let mainAlue = document.getElementById("main_alue");
-                    mainAlue.innerHTML = "<h3>Täysi henkilökuntataulukko järjestelmänvalvojalle</h3>";
+                    // let mainAlue = document.getElementById("main_alue");
+                    // mainAlue.innerHTML = "<h3>Täysi henkilökuntataulukko järjestelmänvalvojalle</h3>";
 
                     await loadStaff(); // Ladataan työntekijälistaa
 
                     // Luo div adminPanelille, jos sitä ei vielä ole
-                    let adminPanel = document.createElement("div");
-                    adminPanel.id = "adminPanel";
-                    mainAlue.appendChild(adminPanel); // Lisää arvoon main_value
+                    // let adminPanel = document.createElement("div");
+                    // adminPanel.id = "adminPanel";
+                    // mainAlue.appendChild(adminPanel); // Lisää arvoon main_value
 
                     renderAdminPanel(); // Näytetään hallintapaneeli
 
@@ -373,6 +373,7 @@ function renderUserProfile(user) {
                                 <li class="list-group-item"><p class="card-text"><strong>Department:</strong> ${user.department}</p></li>
                                 <li class="list-group-item"><p class="card-text"><strong>Email:</strong> ${user.email}</p></li>
                                 <li class="list-group-item"><p class="card-text"><strong>Phone:</strong> ${user.phone}</p></li>
+                                <li class="list-group-item"><p class="card-text"><strong>Approved Vacation Month:</strong> ${user.approvedVacationMonth || "Not specified"}</p></li>
                                 <li class="list-group-item">
                                     <strong>Desired Vacation Month:</strong> <select id="vacationMonth" class="form-select">
                                         <option value="" disabled selected>Valitse kuukausi</option>
@@ -390,7 +391,6 @@ function renderUserProfile(user) {
                                         <option value="December">December</option>
                                     </select>
                                 </li>
-                                <li class="list-group-item"><p class="card-text"><strong>Approved Vacation Month:</strong> ${user.approvedVacationMonth}</p></li>
                             </ul>
                             <p class="card-text"><small class="text-body-secondary">Role: ${user.role}</small></p>
                             <button class="btn btn-primary mt-3" onclick="submitVacationRequest('${user.id}')">Send request</button>
@@ -434,6 +434,9 @@ function renderStaffTable(staff) {
         document.getElementById("main_alue").innerHTML += "<p>No data to display</p>";
         return;
     }
+
+    let mainAlue = document.getElementById("main_alue");
+    mainAlue.innerHTML = "<h3>Täysi henkilökuntataulukko järjestelmänvalvojalle</h3>";
     
     let tableHTML = `
         </br>
@@ -470,7 +473,11 @@ function renderStaffTable(staff) {
 
     tableHTML += `</tbody></table>`;
 
-    document.getElementById("main_alue").innerHTML += tableHTML;
+    mainAlue.innerHTML += tableHTML;
+
+    let adminPanel = document.createElement("div");
+                    adminPanel.id = "adminPanel";
+                    mainAlue.appendChild(adminPanel); // Lisää arvoon main_value
 }
 
 // Function loadStaffLimited() to load a table without the column “month of vacation”
@@ -546,7 +553,12 @@ function approveRequest(userId) {
     .then(data => {
         if (data.success) {
             alert("Request approved!");
+            document.getElementById("main_alue").innerHTML = "";
+            console.log("запускаем loadStaff() в approveRequest");
+            loadStaff(); // Refresh the table after approval
+            console.log("запускаем renderAdminPanel() в approveRequest");
             renderAdminPanel();
+            
         } else {
             alert("Error: " + data.error);
         }

@@ -11,7 +11,7 @@ document.addEventListener("submit", async function (event) {
             const phone = document.getElementById("phone").value.trim();
 
             if (!name || !email || !phone) {
-                alert("Заполните все поля!");
+                alert("Täytä kaikki kentät!");
                 return;
             }
 
@@ -23,19 +23,19 @@ document.addEventListener("submit", async function (event) {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert("Регистрация успешна!");
+                    alert("Rekisteröinti onnistui!");
                     document.getElementById("guestFormContainer").style.display = "none";
                     document.getElementById("staffTableContainer").style.display = "block";
-                    loadStaffLimited(); // Загружаем таблицу
+                    loadStaffLimited(); // Ladataan taulukko
                 } else if (data.alreadyRegistered) {
-                    alert("Вы уже зарегистрированы! Переход к таблице персонала.");
+                    alert("Olet jo rekisteröitynyt! Mene henkilökunnan taulukkoon.");
                     document.getElementById("guestFormContainer").style.display = "none";
                     document.getElementById("staffTableContainer").style.display = "block";
-                    loadStaffLimited(); // Загружаем таблицу
+                    loadStaffLimited(); // Ladataan taulukko
                 } else {
-                    alert("Ошибка регистрации: " + data.error);
+                    alert("Rekisteröintivirhe: " + data.error);
                 }
             })
-            .catch(error => console.error("Ошибка API регистрации гостя: ", error));
+            .catch(error => console.error("Guest Registration API Error: ", error));
         }
 });
