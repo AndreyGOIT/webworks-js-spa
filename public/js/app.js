@@ -359,11 +359,11 @@ function renderUserProfile(user) {
     let mainAlue = document.getElementById("main_alue");
     mainAlue.innerHTML = `
         <h3 class="text-center">Käyttäjäprofiili</h3>
-        <div class="d-flex justify-content-center">  <!-- Центрирование -->
-            <div class="card mb-3" style="max-width: 540px;">
+        <div class="d-flex justify-content-center">  <!-- Centering -->
+            <div class="card mb-3" style="max-width: 650px;">
                 <div class="row g-0">
                     <div class="col-md-4 d-flex align-items-stretch">
-                        <img src="${user.avatar}" class="img-fluid rounded-start w-100 h-100 object-fit-cover" alt="${user.name}">
+                        <img src="${user.avatar}" class="img-fluid rounded-start w-150 h-100 object-fit-cover" alt="${user.name}">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
@@ -393,7 +393,7 @@ function renderUserProfile(user) {
                                 <li class="list-group-item"><p class="card-text"><strong>Approved Vacation Month:</strong> ${user.approvedVacationMonth}</p></li>
                             </ul>
                             <p class="card-text"><small class="text-body-secondary">Role: ${user.role}</small></p>
-                            <button class="btn btn-primary mt-3" onclick="submitVacationRequest('${user.id}')">Отправить запрос</button>
+                            <button class="btn btn-primary mt-3" onclick="submitVacationRequest('${user.id}')">Send request</button>
                         </div>
                     </div>
                 </div>

@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const dataStore = require('./data/dataStore.json');
 const session = require('express-session');
-const bcrypt = require('bcrypt');
 const fs = require("fs");
 const pathToLocalDB = "./data/dataStore.json";
 
@@ -12,8 +11,8 @@ const { Server } = require('socket.io');
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:5500',  // Адрес фронта
-    credentials: true  // Разрешает отправку cookie
+    origin: 'http://localhost:5500',  // Front address
+    credentials: true  // Allows sending cookies
 }));
 
 const server = http.createServer(app);
@@ -22,15 +21,15 @@ const io = new Server(server);
 app.use(express.static('public'));
 app.use(express.json());
 
-// Настроим сессии
+// Setting up a session
 app.use(session({
     secret: 'secret_key',
     resave: false,
     saveUninitialized: false,
     cookie: {
-        httpOnly: true,   // Защита от XSS
-        secure: false,    // false для локальной разработки, true для HTTPS
-        sameSite: 'lax' // Меняем 'none' на 'lax'
+        httpOnly: true,   // XSS protection
+        secure: false,    // false for local development, true for HTTPS
+        sameSite: 'lax' // Change 'none' to 'lax'
     }
 }));
 
@@ -62,55 +61,53 @@ io.on('connection', (socket) => {
 
 
 function loadUsers() {
-    const data = fs.readFileSync(pathToLocalDB, "utf8");
-    //console.log("Загруженная база данных:", data);
-    // console.log("Загруженные пользователи:", JSON.parse(data).team);
+    const data = fs.readFileSync(pathToLocalDB, "utf8"); // Read the database file
 
     return JSON.parse(data).team;
 }
 
-//---------endpoints----------
-// Эндпоинт для логина
+//---------ENDPOINTS----------
+// Endpoint for login
 app.post('/api/login', (req, res) => {
     // console.log('Request body:', req.body);
     const { username, password } = req.body;
-    const users = loadUsers(); // Загружаем пользователей из файла
+    const users = loadUsers(); // Loading users from a database
 
-    // Ищем пользователя
+    // Looking for user
     const user = users.find(u => u.name === username && u.password === password);
 
     if (user) {
-        req.session.user = { id: user.id, avatar: user.avatar, name: user.name, role: user.role, position: user.position, department: user.department, email: user.email, phone: user.phone, desiredVacationMonth: user.desiredVacationMonth, approvedVacationMonth: user.approvedVacationMonth }; // Сохраняем данные пользователя в сессии (кроме пароля)
+        req.session.user = { id: user.id, avatar: user.avatar, name: user.name, role: user.role, position: user.position, department: user.department, email: user.email, phone: user.phone, desiredVacationMonth: user.desiredVacationMonth, approvedVacationMonth: user.approvedVacationMonth }; // We save user data in the session (except the password)
 
         return req.session.save(err => {
             if (err) {
-                console.error('Ошибка сохранения сессии:', err);
-                return res.status(500).json({ success: false, error: 'Ошибка сервера' });
+                console.error('Error saving session:', err);
+                return res.status(500).json({ success: false, error: 'Server error' });
             }
             res.json({ success: true, user: req.session.user });
         });
     }
 
-    res.status(401).json({ success: false, error: 'Неверные учетные данные' });
+    res.status(401).json({ success: false, error: 'Incorrect credentials' });
 });
 
-// Проверка роли пользователя
+// Checking user role
 app.get("/api/user-role", (req, res) => {
     if (!req.session.user) {
         return res.json({ role: "guest" });
     }
-    res.json({ role: req.session.user.role }); // Например, "admin" или "user"
+    res.json({ role: req.session.user.role }); // For example, "admin" or "user"
 });
 
-// Эндпоинт для вывода данных сотрудников
+// Endpoint for outputting employee data
 app.get('/api/user-profile', (req, res) => {
     if (!req.session.user) {
-        return res.status(401).json({ error: "Неавторизованный доступ" });
+        return res.status(401).json({ error: "Unauthorized access" });
     }
-    // console.log("данные профиля авторизованного пользователя: ", req.session.user);
+    // console.log("authorized user profile data: ", req.session.user);
     const { id, avatar, name, role, position, department, email, phone, desiredVacationMonth, approvedVacationMonth } = req.session.user;
 
-    // Здесь можно подтягивать данные о пользователе из базы данных, если нужно
+    // user data from the database
     const userData = {
         id,
         avatar,
@@ -128,67 +125,58 @@ app.get('/api/user-profile', (req, res) => {
 });
 
 //------------REST API palvelin-----------
-//API для обработки запроса на утверждение отпуска
+//API for processing leave approval request
 app.post("/api/request-vacation", (req, res) => {
-    console.log("тело боди в API запроса на утверждение: ",req.body);
     const { userId, month } = req.body;
     const dataStore = require("./data/dataStore.json");
-    console.log("проверка типа получаемого userId: ", typeof userId);
-    console.log("проверка типа получаемого userId с плюсом: ", typeof +userId);
-    console.log("id в профиле Virtanen: ",dataStore.team[1].id);
-    const user = dataStore.team.find(u => u.id === +userId);
-    console.log("данные пользователя в API запроса на утверждение: ",user);
+    
+    const user = dataStore.team.find(u => u.id === +userId); // Finding a user by ID
+    
     if (!user) {
-        return res.json({ success: false, error: "Пользователь не найден" });
+        return res.json({ success: false, error: "User not found" });
     }
 
-    // Добавляем запрос в список ожидающих
+    // Adding a request to the pending list
     const newRequest = { userId, name: user.name, month, status: "pending" };
-    console.log("newRequest в API на запрос: ",newRequest);
     dataStore.vacationRequests.push(newRequest);
 
-    // Записываем изменения
+    // write down the changes to the file
     fs.writeFileSync("./data/dataStore.json", JSON.stringify(dataStore, null, 2));
 
     res.json({ success: true });
 });
 
-// Middleware для защиты маршрутов
+// Middleware for Route Protection
 function isAuthenticated(req, res, next) {
     if (!req.session.user) {
         return res.status(403).json({ error: "Not authenticated" });
     }
     
-    // Проверка роли только для /api/staff
+    // Role check only for /api/staff
     if (req.path === "/api/staff" && req.session.user.role !== "admin") {
         return res.status(403).json({ error: "Access denied" });
     }
 
-    next();
+    next(); // continue executing the next handler
 }
 
-// Эндпоинт для проверки авторизации
+// Endpoint for checking authorization
 app.get('/api/check-auth', (req, res) => {
-    //console.log('Session in chek-auth:', req.session);  // Лог сессии
     
     if (req.session.user) {
         return res.json({ isAuthenticated: true, user: req.session.user });
     }
 
     res.json({ isAuthenticated: false });
-    // res.json({ isAuthenticated: !!req.session.user });
 });
 
-// Эндпоинт для вывода данных сотрудников (с мидлвейром)
+// Endpoint for outputting employee data (with middleware)
 app.get('/api/staff', isAuthenticated, (req, res) => {
-    console.log("Session data:", req.session);
-    console.log("User data:", req.session.user);
     res.json(dataStore);
 });
 
-// Эндпоинт для вывода данных сотрудников для пользователя guest
+// Endpoint for displaying employee data for the GUEST user
 app.get('/api/staff-limited', (req, res) => {
-    //console.log("Персонал для гостя:", dataStore.team);
 
     const limitedData = dataStore.team.map(emp => ({
         id: emp.id,
@@ -197,40 +185,38 @@ app.get('/api/staff-limited', (req, res) => {
         position: emp.position,
         email: emp.email,
         phone: emp.phone
-        // НЕ добавляем месяц отпуска
+        // DO NOT add a month of vacation (or other internal data)
     }));
     res.json(limitedData);
 });
 
-// Эндпоинт для регистрации гостя (сохранение данных в dataStore.json)
-const path = require("path");
-//const dataFilePath = path.join(__dirname, "dataStore.json");
+// Endpoint for guest registration (saving data to dataStore.json)
 
 app.post("/api/register-guest", (req, res) => {
     const { name, email, phone } = req.body;
 
     if (!name || !email || !phone) {
-        return res.status(400).json({ success: false, error: "Заполните все поля" });
+        return res.status(400).json({ success: false, error: "Fill in all fields" });
     }
 
-    // Проверяем, есть ли пользователь в registeredUsers
+    // Check if the user is in registeredUsers
     const userExists = dataStore.registeredUsers.some(user => user.email === email);
 
     if (userExists) {
-        // Если пользователь уже зарегистрирован, отправляем таблицу персонала
+        // If the user is already registered, we send the staff table
         return res.json({ success: false, alreadyRegistered: true });
     }
 
-    // Если пользователя нет в базе, регистрируем его
+    // If the user is not in the database, we register him
     const newUser = { name, email, phone };
     dataStore.registeredUsers.push(newUser);
 
-    // Сохраняем изменения в файле
+    // Save changes to the file
     const fs = require("fs");
     fs.writeFile("./data/dataStore.json", JSON.stringify(dataStore, null, 2), (err) => {
         if (err) {
-            console.error("Ошибка записи в dataStore.json:", err);
-            return res.status(500).json({ success: false, error: "Ошибка сохранения данных." });
+            console.error("Error writing to dataStore.json:", err);
+            return res.status(500).json({ success: false, error: "Error saving data." });
         }
 
         res.json({ success: true });
@@ -256,7 +242,7 @@ app.post("/api/register-guest", (req, res) => {
     // }
 });
 
-// Эндпоинт для обработки кнопок Admin
+//----------Endpoint for handling Admin buttons-------
 app.get("/api/get-vacation-requests", (req, res) => {
     const dataStore = require("./data/dataStore.json");
     res.json({ requests: dataStore.vacationRequests });
@@ -267,23 +253,23 @@ app.post("/api/approve-vacation", (req, res) => {
     let dataStore = require("./data/dataStore.json");
 
     let request = dataStore.vacationRequests.find(r => r.userId === userId);
-    console.log("request в approve-vacation: ",request);
+    console.log("request in approve-vacation: ",request);
     let user = dataStore.team.find(u => u.id === +userId);
-    console.log("user в approve-vacation: ",user);
+    console.log("user in approve-vacation: ",user);
     if (request && user) {
         request.status = "approved";
 
-        // Форматируем дату как "19.02.2025 14:30"
+        // Format the date as "19.02.2025 14:30"
         const now = new Date();
         const formattedDate = `${now.getDate().toString().padStart(2, '0')}.${(now.getMonth() + 1).toString().padStart(2, '0')}.${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
-        request.approvedDate = formattedDate; // Записываем дату одобрения
-        user.approvedVacationMonth = request.month; // Фиксируем утвержденный месяц отпуска
+        request.approvedDate = formattedDate; // write down the date of approval
+        user.approvedVacationMonth = request.month; // fix the approved month of vacation
 
         fs.writeFileSync("./data/dataStore.json", JSON.stringify(dataStore, null, 2));
         res.json({ success: true });
     } else {
-        res.json({ success: false, error: "Запрос или сотрудник не найден" });
+        res.json({ success: false, error: "Request or employee not found" });
     }
 });
 
@@ -297,12 +283,12 @@ app.post("/api/decline-vacation", (req, res) => {
         fs.writeFileSync("./data/dataStore.json", JSON.stringify(dataStore, null, 2));
         res.json({ success: true });
     } else {
-        res.json({ success: false, error: "Запрос не найден" });
+        res.json({ success: false, error: "Request not found" });
     }
 });
-//--окончание эндпоинта для обработки кнопок Admin----
+//--endpoints for processing buttons at Admin end here----
 
-// Эндпоинт для выхода
+// Endpoint for exiting the session
 app.post('/api/logout', (req, res) => {
     req.session.destroy(() => {
         res.json({ success: true });

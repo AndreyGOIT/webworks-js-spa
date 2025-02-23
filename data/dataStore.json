@@ -4,11 +4,6 @@
       "name": "Visitor",
       "email": "visitor@mail.com",
       "phone": "+1234567890"
-    },
-    {
-      "name": "Test User",
-      "email": "user@mail.com",
-      "phone": "+358441234567"
     }
   ],
   "team": [
@@ -100,19 +95,7 @@
     }
   ],
   "vacationRequests": [
-    {
-      "userId": "2",
-      "name": "Janne Virtanen",
-      "month": "January",
-      "status": "declined",
-      "approvedDate": "21.02.2025 17:16"
-    },
-    {
-      "userId": "2",
-      "name": "Janne Virtanen",
-      "month": "February",
-      "status": "pending"
-    },
+    
     {
       "userId": "5",
       "name": "Anna Korhonen",
