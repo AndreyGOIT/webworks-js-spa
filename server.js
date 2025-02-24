@@ -35,7 +35,7 @@ app.use(session({
 
 //--------------socket.io--------------
 io.on('connection', (socket) => {
-    console.log('Käyttäjä yhdistetty:', socket.id);
+    //console.log('Käyttäjä yhdistetty:', socket.id);
 
     // Processing the entrance to the chat
   socket.on("join", (name) => {
@@ -253,9 +253,8 @@ app.post("/api/approve-vacation", (req, res) => {
     let dataStore = require("./data/dataStore.json");
 
     let request = dataStore.vacationRequests.find(r => r.userId === userId);
-    console.log("request in approve-vacation: ",request);
     let user = dataStore.team.find(u => u.id === +userId);
-    console.log("user in approve-vacation: ",user);
+    
     if (request && user) {
         request.status = "approved";
 
@@ -302,3 +301,5 @@ server.listen(PORT, "0.0.0.0", () => {
   console.log(`Example app listening on port ${PORT}!`);    
 });
 //-----------------------------------------
+// app deployed to Render.com:
+// https://webworks-3uzq.onrender.com

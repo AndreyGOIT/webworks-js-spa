@@ -272,6 +272,7 @@ const pages = {
 };
 
 window.loadPage = async function (page) {
+    window.scrollTo(0, 0); // Pakota vieritys ylös
     if (page === "henkilosto") {
         try {
                 const role = await checkUserRole() // Odotetaan roolin vahvistuksen valmistumista
