@@ -42,29 +42,29 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
               <li class="nav-item">
-                <button class="nav-btn" onclick="loadPage('home')">HOME</button>
+                <button class="nav-btn" onclick="loadPage('home')"  data-page="home">HOME</button>
               </li>
               <li class="nav-item">
-                <button class="nav-btn" onclick="loadPage('tuotteet')">TUOTTEET</button>
+                <button class="nav-btn" onclick="loadPage('tuotteet')"  data-page="tuotteet">TUOTTEET</button>
               </li>
               <li class="nav-item">
-                <button class="nav-btn" onclick="loadPage('yhteystiedot')">YHTEYSTIEDOT</button>
+                <button class="nav-btn" onclick="loadPage('yhteystiedot')"  data-page="yhteystiedot">YHTEYSTIEDOT</button>
               </li>
               <li class="nav-item">
-                <button class="nav-btn" onclick="loadPage('henkilosto')">HENKILÖSTÖ</button>
+                <button class="nav-btn" onclick="loadPage('henkilosto')"  data-page="henkilosto">HENKILÖSTÖ</button>
               </li>
               <!--login and logout buttons-->
-              <li class="nav-item">
+              <li class="nav-item btn-login">
                 <button
                   id="login-button"
-                  class="btn btn-primary"
+                  class="btn btn-primary "
                   data-bs-toggle="modal"
                   data-bs-target="#loginModal"
                 >
                   Login
                 </button>
               </li>
-              <li class="nav-item">
+              <li class="nav-item btn-logout">
                 <button
                   id="logout-button"
                   class="btn btn-danger d-none"
@@ -143,13 +143,13 @@
           </div>
           <!-- Koodilohko, jossa on navigointi -->
           <div class="footer-row-item">
-            <h3>Navigointi</h3>
-            <nav>
+            <h3 class="footer-nav-title">Navigointi</h3>
+            <nav class="footer-nav">
               <ul class="footer-nav-list">
-                <li><button class="footer-nav-button" onclick="loadPage('home')">HOME</button></li>
-                <li><button class="footer-nav-button" onclick="loadPage('tuotteet')">TUOTTEET</button></li>
-                <li><button class="footer-nav-button" onclick="loadPage('yhteystiedot')">YHTEYSTIEDOT</button></li>
-                <li><button class="footer-nav-button" onclick="loadPage('henkilosto')">HENKILÖSTÖ</button></li>
+                <li><button class="footer-nav-button" onclick="loadPage('home')" data-page="home">HOME</button></li>
+                <li><button class="footer-nav-button" onclick="loadPage('tuotteet')" data-page="tuotteet">TUOTTEET</button></li>
+                <li><button class="footer-nav-button" onclick="loadPage('yhteystiedot')" data-page="yhteystiedot">YHTEYSTIEDOT</button></li>
+                <li><button class="footer-nav-button" onclick="loadPage('henkilosto')" data-page="henkilosto">HENKILÖSTÖ</button></li>
               </ul>
             </nav>
           </div>
@@ -185,7 +185,7 @@
         </div>
         <hr />
         <div class="footer-bottom">
-          <p class="m-0">
+          <p class="m-0 footer-bottom-text">
             <img
               src="images/Logo_WebWorks_Studio.png"
               alt="Firman Logo"

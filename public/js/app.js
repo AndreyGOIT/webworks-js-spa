@@ -43,7 +43,7 @@ const pages = {
                             <td>Ylläpito ja tuki</td>
                             <td>Sisällön päivitys, virheiden korjaus ja sivuston seuranta</td>
                             <td>Kuukausittain</td>
-                            <td>300 € / kuukausi</td>
+                            <td>300 € / kk</td>
                         </tr>
                         <tr>
                             <td><button onclick="loadPage('sovelluskehitys')" class="link-button">Verkkosovellusten kehitys</button></td>
@@ -61,7 +61,7 @@ const pages = {
                             <td>Hosting ja domain</td>
                             <td>Verkkotunnusten rekisteröinti ja hosting-palvelut</td>
                             <td>1–2 päivää</td>
-                            <td>50 € / kuukausi</td>
+                            <td>50 € / kk</td>
                         </tr>
                         </tbody>
                     </table>
@@ -271,31 +271,30 @@ const pages = {
                         </section>`,
 };
 
+// Function to load a page
 window.loadPage = async function (page) {
     window.scrollTo(0, 0); // Pakota vieritys ylös
+    // Active button backlight
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+        btn.classList.remove("active"); // Сlean up from everyone
+        if (btn.getAttribute("data-page") === page) {
+            btn.classList.add("active"); // Add only active
+        }
+    });
+
     if (page === "henkilosto") {
         try {
                 const role = await checkUserRole() // Odotetaan roolin vahvistuksen valmistumista
             
                 if (role === "admin") {
-                    // let mainAlue = document.getElementById("main_alue");
-                    // mainAlue.innerHTML = "<h3>Täysi henkilökuntataulukko järjestelmänvalvojalle</h3>";
-
                     await loadStaff(); // Ladataan työntekijälistaa
-
-                    // Luo div adminPanelille, jos sitä ei vielä ole
-                    // let adminPanel = document.createElement("div");
-                    // adminPanel.id = "adminPanel";
-                    // mainAlue.appendChild(adminPanel); // Lisää arvoon main_value
 
                     renderAdminPanel(); // Näytetään hallintapaneeli
 
                 } else if (role === "user") {
-
                     loadUserProfile(); // Henkilötietojen lataaminen
 
                 } else if (role === "guest") {
-
                     document.getElementById("main_alue").innerHTML = pages["henkilosto"]; // Näytämme ilmoittautumislomakkeen
 
                 } else {
@@ -310,6 +309,7 @@ window.loadPage = async function (page) {
     }
 }
 
+// Function to check user role
 function checkUserRole() {
     return fetch("/api/user-role", { credentials: "include" })
         .then(response => response.json())
@@ -323,6 +323,7 @@ function checkUserRole() {
         });
 }
 
+// Function to load user profile
 function loadUserProfile() {
     fetch("/api/user-profile", { credentials: "include" })
         .then(response => {
@@ -340,6 +341,7 @@ function loadUserProfile() {
         });
 }
 
+// Function to load staff data
 async function loadStaff() {
     try {
         let response = await fetch("/api/staff", {
@@ -584,3 +586,16 @@ function declineRequest(userId) {
     })
     .catch(error => console.error("Error:", error));
 }
+
+// Function for rendering the chat button
+document.addEventListener("DOMContentLoaded", function () {
+    const chatButton = document.getElementById("chat-button");
+
+    // Add a class with animation
+    chatButton.classList.add("pulsing");
+
+    // Remove the class after 5 seconds (5 repetitions of 1 second)
+    setTimeout(() => {
+        chatButton.classList.remove("pulsing");
+    }, 5000);
+});

@@ -1,4 +1,5 @@
 @import '@fortawesome/fontawesome-free/css/all.min.css';
+@import "bootstrap/scss/variables";
 
 body {
   font-family: Arial, sans-serif;
@@ -33,10 +34,13 @@ button {
   font-size: 20px;
   font-weight: bold;
 }
+.brand-text:hover {
+  color:  #33383d;
+}
 
 #auth-username {
   font-size: 18px;
-  color: rgb(5, 138, 233);
+  color: #33383d;
   font-weight: bold;
 }
 
@@ -60,8 +64,23 @@ th {
 .nav-btn {
   background: #557A95;
   color: aliceblue;
-  border: none;
+  border: 3px solid transparent; /* Hidden Border */
+  transition: border 0.3s ease-in-out, font-weight 0.3s;
 }
+.nav-btn:hover {
+  border: 3px solid #ffffff;
+  border-radius: 5px;
+  font-weight: 900;
+}
+.nav-btn.active, .footer-nav-button.active {
+  text-decoration: underline;
+  font-weight: bold;
+}
+.btn-login, 
+.btn-logout {
+  padding-top: 5px;
+}
+
 #main_alue {
   margin-top: 20px;
 }
@@ -106,7 +125,8 @@ th {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 .footer-nav-list {
   list-style: none;
@@ -115,6 +135,7 @@ th {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  margin-bottom: 0;
 }
 .footer-nav-address {
   margin: 5px;
@@ -127,14 +148,19 @@ th {
   text-align: left;
 }
 .footer-nav-button {
-  margin: 5px;
-  padding: 10px;
+  /* margin: 5px; */
+  padding: 5px;
   cursor: pointer;
   background-color: #557A95;
   color: white;
-  border: none;
+  border: 3px solid transparent; /* Hidden Border */
+  transition: border 0.3s ease-in-out, font-weight 0.3s;
   border-radius: 5px;
   text-align: left;
+}
+.footer-nav-button:hover {
+  border: 3px solid #ffffff; 
+  font-weight: 900;
 }
 
 .footer-row.some {
@@ -144,6 +170,7 @@ th {
   justify-content: center;
   align-items: center;
   gap: 10px; /* Distance between buttons */
+  padding-top: 50px;
 }
 
 .footer-row.some a {
@@ -177,14 +204,17 @@ input.is-valid {
   border: none;
   padding: 0;
   margin: 0;
-  color: blue;
-  text-decoration: underline;
+  color: rgb(23, 23, 29);
+  /* text-decoration: underline; */
   cursor: pointer;
   font: inherit;
+  font-weight: bold;
 }
 
 .link-button:hover {
   color: darkblue;
+  /* font-size: larger; */
+  text-decoration: underline;
 }
 
 .slogan {
@@ -209,6 +239,7 @@ input.is-valid {
   font-style: italic;
   margin: 0;
   padding: 0;
+  color: white;
 }
 
 /* Media queries for responsive design - 768px and 425px */
@@ -296,31 +327,37 @@ input.is-valid {
   .footer-row-item {
     width: 100%;
   }
+  .footer-nav-title {
+    margin-bottom: 0;
+  }
+  .footer-nav {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
 
   /* Social networks are lined up in a row */
   .footer-row.some {
     flex-wrap: nowrap; /* Force not to allow transfer */
     justify-content: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
-  
-  /* .footer-row.some a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 35px; 
-    height: 35px;
-    padding: 0;
-    border-radius: 50%; 
-  } */
-
-  /* Logo in the footer has been reduced */
+  /* Logo and taxt in the footer has been reduced */
   .logo-bottom {
-    width: 40px;
+    width: 30px;
+  }
+  .footer-bottom-text {
+    font-size: 14px;
   }
 }
 
 /*---------------chat---------------*/
 /* Kelluva painike */
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
 #chat-button {
   position: fixed;
   bottom: 20px;
@@ -336,6 +373,10 @@ input.is-valid {
   font-size: 24px;
   cursor: pointer;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+#chat-button.pulsing {
+  animation: pulse 1s ease-in-out 5; /* 5 reps, 1 sec each */
 }
 
 /* Modaalinen ikkuna */
